@@ -1272,11 +1272,15 @@ function renderReport(units, totalScore, totalQ) {
     '</div>' +
     '<div class="res-actions">' +
       '<button class="btn-action btn-secondary" id="btn-copy-plan">📋 复制选课诊断清单</button>' +
-      '<button class="btn-action btn-primary" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">⬆ 回到顶部查看答题详情</button>' +
+      '<button class="btn-action btn-primary" id="btn-scroll-top">⬆ 回到顶部查看答题详情</button>' +
     '</div>';
 
   R.classList.add("show");
   R.scrollIntoView({ behavior: "smooth" });
+
+  document.getElementById("btn-scroll-top").addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   document.getElementById("btn-copy-plan").addEventListener("click", () => {
     let copyText = "【现代决策学 · 前置自测诊断清单】\\n";
