@@ -3,229 +3,1285 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>现代决策学 · 前置自测</title>
+<title>现代决策学 · 前置自测系统</title>
 <style>
-  :root{
-    --bg:#f6f7f9; --panel:#ffffff; --ink:#1f2430; --sub:#5b6472; --line:#e6e9ef;
-    --brand:#2f6fed; --brand-soft:#eaf1ff; --ok:#1a9e6a; --ok-soft:#e8f7f0;
-    --warn:#d97706; --warn-soft:#fdf3e3; --err:#dc2626; --err-soft:#fdecec;
+  :root {
+    --bg: #f8fafc;
+    --panel: #ffffff;
+    --panel-sub: #f1f5f9;
+    --ink: #0f172a;
+    --sub: #475569;
+    --muted: #94a3b8;
+    --line: #e2e8f0;
+    --brand: #2563eb;
+    --brand-hover: #1d4ed8;
+    --brand-soft: #eff6ff;
+    --brand-border: #bfdbfe;
+    --ok: #059669;
+    --ok-soft: #ecfdf5;
+    --ok-border: #a7f3d0;
+    --warn: #d97706;
+    --warn-soft: #fffbeb;
+    --warn-border: #fde68a;
+    --err: #dc2626;
+    --err-soft: #fef2f2;
+    --skip: #64748b;
+    --skip-soft: #f8fafc;
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-    line-height:1.6;}
-  .wrap{max-width:880px;margin:0 auto;padding:32px 20px 96px;}
-  header.top{background:linear-gradient(135deg,#2f6fed,#5b8cf7);color:#fff;border-radius:18px;
-    padding:28px 26px;box-shadow:0 8px 24px rgba(47,111,237,.18);}
-  header.top h1{margin:0 0 6px;font-size:22px;letter-spacing:.5px}
-  header.top p{margin:0;opacity:.92;font-size:13.5px}
-  .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:12px}
-  .legend span{background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px}
-  .intro{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
-    margin:18px 0 22px;font-size:13.5px;color:var(--sub)}
-  .intro b{color:var(--ink)}
-  .mod{margin:26px 0 10px;font-size:15px;font-weight:700;color:var(--ink);
-    display:flex;align-items:center;gap:10px}
-  .mod::before{content:"";width:4px;height:18px;border-radius:3px;background:var(--brand)}
-  .unit{background:var(--panel);border:1px solid var(--line);border-radius:16px;
-    padding:18px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(20,30,60,.04)}
-  .unit-h{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  .unit-t{font-size:15px;font-weight:700}
-  .unit-t small{font-weight:600;color:var(--brand);margin-right:8px;background:var(--brand-soft);
-    padding:2px 8px;border-radius:8px;font-size:12px}
-  .badge{font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:20px;white-space:nowrap;
-    background:#eef1f6;color:var(--sub)}
-  .badge.ok{background:var(--ok-soft);color:var(--ok)}
-  .badge.warn{background:var(--warn-soft);color:var(--warn)}
-  .goal{font-size:12.5px;color:var(--sub);margin:8px 0 4px}
-  .q{padding:14px 0;border-top:1px dashed var(--line);margin-top:12px}
-  .q:first-of-type{border-top:none;margin-top:6px}
-  .q-t{font-size:14px;font-weight:600;margin-bottom:10px}
-  .q-t i{font-style:normal;color:var(--brand);font-weight:700;margin-right:6px}
-  .opts{display:flex;flex-direction:column;gap:7px}
-  .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;
-    padding:9px 12px;cursor:pointer;font-size:13.5px;transition:.15s;background:#fff}
-  .opt:hover{border-color:#c7d5f5;background:#fafbff}
-  .opt input{margin-top:3px;accent-color:var(--brand)}
-  .opt.sel{border-color:var(--brand);background:var(--brand-soft)}
-  .opt.right{border-color:var(--ok);background:var(--ok-soft)}
-  .opt.wrong{border-color:var(--err);background:var(--err-soft)}
-  .opt .k{font-weight:700;color:var(--sub);min-width:14px}
-  .fb{display:none;margin-top:10px;font-size:12.8px;border-radius:10px;padding:10px 12px}
-  .fb.show{display:block}
-  .fb.right{background:var(--ok-soft);color:#166a4b}
-  .fb.wrong{background:var(--err-soft);color:#a12121}
-  .fb b{color:inherit}
-  .actions{position:sticky;bottom:0;margin-top:26px;background:linear-gradient(180deg,rgba(246,247,249,0),var(--bg) 30%);
-    padding:18px 0 6px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  button{border:none;border-radius:12px;padding:12px 22px;font-size:14.5px;font-weight:600;cursor:pointer;
-    font-family:inherit;transition:.15s}
-  .primary{background:var(--brand);color:#fff;box-shadow:0 6px 16px rgba(47,111,237,.28)}
-  .primary:hover{background:#255fd6}
-  .ghost{background:#fff;color:var(--sub);border:1px solid var(--line)}
-  .ghost:hover{border-color:#c7d5f5;color:var(--brand)}
-  .result{display:none;margin-top:22px;background:var(--panel);border:1px solid var(--line);
-    border-radius:16px;padding:22px;box-shadow:0 8px 24px rgba(20,30,60,.08)}
-  .result.show{display:block}
-  .result h2{margin:0 0 6px;font-size:18px}
-  .score-top{font-size:13.5px;color:var(--sub);margin-bottom:14px}
-  .bar{height:10px;border-radius:6px;background:#eef1f6;overflow:hidden;margin:6px 0 14px}
-  .bar>i{display:block;height:100%;background:linear-gradient(90deg,#2f6fed,#6aa0ff);width:0;transition:.6s}
-  .advice{font-size:14px;background:var(--brand-soft);color:#1d4fa8;border-radius:12px;padding:12px 14px;margin-bottom:16px}
-  .rlist{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .ritem{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:8px 11px;border-radius:10px;background:#f4f6fa}
-  .ritem.ok{background:var(--ok-soft)}
-  .ritem.warn{background:var(--warn-soft)}
-  .ritem .n{color:var(--sub)}
-  @media(max-width:560px){.rlist{grid-template-columns:1fr}}
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 24px 18px 120px;
+  }
+
+  /* 顶部横幅 */
+  header.hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 30px 28px;
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.25);
+    margin-bottom: 20px;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+  header.hero h1 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  header.hero p {
+    margin: 0 0 16px;
+    font-size: 14.5px;
+    opacity: 0.92;
+    max-width: 680px;
+    line-height: 1.55;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+  }
+  .hero-pill {
+    background: rgba(255, 255, 255, 0.16);
+    padding: 4px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* 模式选择器卡片 */
+  .mode-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  }
+  .mode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .mode-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mode-switch-group {
+    display: flex;
+    background: var(--panel-sub);
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+  }
+  .mode-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mode-btn.active {
+    background: var(--panel);
+    color: var(--brand);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+  .mode-desc {
+    font-size: 13px;
+    color: var(--sub);
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    line-height: 1.5;
+  }
+
+  /* 顶部吸顶进度条 */
+  .sticky-progress {
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .prog-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .prog-track {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 99px;
+    overflow: hidden;
+    position: relative;
+  }
+  .prog-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    width: 0%;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 99px;
+  }
+  .prog-num {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--brand);
+    white-space: nowrap;
+  }
+
+  /* 模块分步标签 (Module Step Tabs) */
+  .mod-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 18px;
+    scrollbar-width: none;
+  }
+  .mod-tabs::-webkit-scrollbar { display: none; }
+  .mod-tab {
+    flex-shrink: 0;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mod-tab:hover {
+    border-color: var(--brand-border);
+    color: var(--brand);
+  }
+  .mod-tab.active {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+  }
+  .mod-tab-badge {
+    background: rgba(0, 0, 0, 0.08);
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+  .mod-tab.active .mod-tab-badge {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* 模块容器与单元卡片 */
+  .mod-section {
+    display: none;
+  }
+  .mod-section.active {
+    display: block;
+  }
+  .mod-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 24px 0 12px;
+    padding-left: 4px;
+  }
+  .mod-heading-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mod-heading-text::before {
+    content: "";
+    width: 4px;
+    height: 18px;
+    border-radius: 2px;
+    background: var(--brand);
+  }
+
+  .unit-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+    transition: all 0.2s ease;
+  }
+  .unit-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  }
+  .unit-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .unit-name {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .unit-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--brand);
+    background: var(--brand-soft);
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-right: 8px;
+  }
+  .unit-status-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 99px;
+    background: var(--panel-sub);
+    color: var(--sub);
+  }
+  .unit-status-badge.ok {
+    background: var(--ok-soft);
+    color: var(--ok);
+  }
+  .unit-status-badge.warn {
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+
+  .unit-meta {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* 题目项 */
+  .question-item {
+    padding: 16px 0 12px;
+    border-top: 1px dashed var(--line);
+  }
+  .question-item:first-of-type {
+    border-top: none;
+    padding-top: 4px;
+  }
+  .question-item.hidden-question {
+    display: none;
+  }
+
+  .q-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 10px;
+  }
+  .q-sentinel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .q-concept-tag {
+    font-size: 12px;
+    color: var(--sub);
+  }
+
+  .q-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .q-title i {
+    font-style: normal;
+    color: var(--brand);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* 选项列表 */
+  .opt-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .opt-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 13.8px;
+    line-height: 1.45;
+    color: var(--ink);
+    transition: all 0.15s ease;
+  }
+  .opt-row:hover {
+    border-color: #93c5fd;
+    background: #f8fafc;
+  }
+  .opt-row input[type="radio"] {
+    margin-top: 3px;
+    accent-color: var(--brand);
+  }
+  .opt-row.selected {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+    color: #1e3a8a;
+    font-weight: 500;
+  }
+  .opt-row.is-correct {
+    border-color: var(--ok);
+    background: var(--ok-soft);
+    color: #065f46;
+  }
+  .opt-row.is-wrong {
+    border-color: var(--err);
+    background: var(--err-soft);
+    color: #991b1b;
+  }
+  .opt-letter {
+    font-weight: 700;
+    color: var(--sub);
+    min-width: 18px;
+  }
+  .opt-row.selected .opt-letter {
+    color: var(--brand);
+  }
+
+  /* 跳过按钮与反馈区域 */
+  .q-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .btn-skip {
+    background: transparent;
+    border: 1px dashed #cbd5e1;
+    color: var(--sub);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-skip:hover {
+    border-color: var(--skip);
+    background: var(--panel-sub);
+    color: var(--ink);
+  }
+  .btn-skip.skipped {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #334155;
+    font-weight: 600;
+  }
+
+  .q-feedback {
+    display: none;
+    margin-top: 10px;
+    font-size: 13px;
+    border-radius: 10px;
+    padding: 10px 14px;
+    line-height: 1.5;
+  }
+  .q-feedback.show { display: block; }
+  .q-feedback.ok {
+    background: var(--ok-soft);
+    border: 1px solid var(--ok-border);
+    color: #065f46;
+  }
+  .q-feedback.err {
+    background: var(--err-soft);
+    border: 1px solid #fecaca;
+    color: #991b1b;
+  }
+
+  /* 单元扩展加测展开按钮 */
+  .unit-expand-trigger {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: center;
+  }
+  .btn-expand-unit {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--brand);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-expand-unit:hover {
+    background: var(--brand-soft);
+    border-color: var(--brand-border);
+  }
+
+  /* 底部固定操作栏 */
+  .bottom-bar {
+    position: sticky;
+    bottom: 0;
+    margin-top: 30px;
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0) 0%, rgba(248, 250, 252, 0.98) 30%);
+    padding: 18px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    z-index: 90;
+  }
+  .bottom-left, .bottom-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-action {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  }
+  .btn-primary:hover {
+    background: var(--brand-hover);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--sub);
+    border: 1px solid var(--line);
+  }
+  .btn-secondary:hover {
+    border-color: #cbd5e1;
+    color: var(--ink);
+  }
+
+  /* 诊断结果报告面板 */
+  .result-panel {
+    display: none;
+    margin-top: 30px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  }
+  .result-panel.show { display: block; }
+  .res-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+  }
+  .res-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 6px;
+  }
+  .res-stat {
+    font-size: 14px;
+    color: var(--sub);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .res-banner {
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .res-banner.full { background: #fee2e2; color: #991b1b; }
+  .res-banner.some { background: #fef3c7; color: #92400e; }
+  .res-banner.few { background: #dbeafe; color: #1e40af; }
+  .res-banner.pass { background: #d1fae5; color: #065f46; }
+  .res-banner-icon { font-size: 22px; flex-shrink: 0; }
+
+  .res-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) {
+    .res-grid { grid-template-columns: 1fr; }
+  }
+  .res-card {
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    background: #f8fafc;
+  }
+  .res-card.pass {
+    border-color: var(--ok-border);
+    background: var(--ok-soft);
+  }
+  .res-card.need {
+    border-color: var(--warn-border);
+    background: var(--warn-soft);
+  }
+  .res-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .res-card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .res-card-badge {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .res-card.pass .res-card-badge { background: #a7f3d0; color: #065f46; }
+  .res-card.need .res-card-badge { background: #fde68a; color: #92400e; }
+  .res-card-concepts {
+    font-size: 12px;
+    color: var(--sub);
+    line-height: 1.4;
+  }
+
+  .res-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #0f172a;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 999;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
+  <!-- 头部介绍 -->
+  <header class="hero">
+    <div class="hero-tag">⚡ 智能分流与免修评估</div>
     <h1>现代决策学 · 前置自测</h1>
-    <p>答完每单元的选择题，系统自动判断你是否已掌握，并提示是否需要上这门课。</p>
-    <div class="legend">
-      <span>✅ 答对率 ≥ 2/3 → 可跳过</span>
-      <span>📘 低于 2/3 → 建议学习</span>
+    <p>为每单元核心认知模型设计的快速诊断。若已掌握即可直接跳过，帮助你精准聚焦认知盲区，大幅节省学习时间。</p>
+    <div class="hero-stats">
+      <div class="hero-pill">🎯 5 个认知模块</div>
+      <div class="hero-pill">📚 15 个决策单元</div>
+      <div class="hero-pill">⚡ 极速诊断只需 5 分钟</div>
     </div>
   </header>
 
-  <div class="intro" id="intro"></div>
-
-  <div id="quiz"></div>
-
-  <div class="actions">
-    <button class="primary" id="submit">提交并查看诊断结果</button>
-    <button class="ghost" id="reset">重做</button>
+  <!-- 模式切换器 -->
+  <div class="mode-card">
+    <div class="mode-header">
+      <div class="mode-title">
+        <span>诊断模式选择</span>
+      </div>
+      <div class="mode-switch-group">
+        <button class="mode-btn active" id="btn-mode-quick" data-mode="quick">
+          <span>🌟 极速诊断 (15题)</span>
+        </button>
+        <button class="mode-btn" id="btn-mode-deep" data-mode="deep">
+          <span>🔍 完整深度自测 (45题)</span>
+        </button>
+      </div>
+    </div>
+    <div class="mode-desc" id="mode-desc-text">
+      <b>极速模式推荐：</b>每单元精选 1 道最具辨识度的核心“哨兵题”（共 15 题）。答对即判定可跳过；遇到不懂概念可一键跳过，约 5 分钟即可定位全部薄弱单元。
+    </div>
   </div>
 
-  <div class="result" id="result"></div>
+  <!-- 顶部吸顶进度条 -->
+  <div class="sticky-progress">
+    <div class="prog-label">
+      <span>答题进度</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-bar" id="prog-bar"></div>
+    </div>
+    <div class="prog-num" id="prog-num">0 / 15</div>
+  </div>
+
+  <!-- 模块导航 Tabs -->
+  <div class="mod-tabs" id="mod-tabs"></div>
+
+  <!-- 答题容器 -->
+  <div id="quiz-container"></div>
+
+  <!-- 底部操作栏 -->
+  <div class="bottom-bar">
+    <div class="bottom-left">
+      <button class="btn-action btn-secondary" id="btn-prev-mod">上一模块</button>
+      <button class="btn-action btn-secondary" id="btn-next-mod">下一模块</button>
+    </div>
+    <div class="bottom-right">
+      <button class="btn-action btn-secondary" id="btn-reset">重置自测</button>
+      <button class="btn-action btn-primary" id="btn-submit">提交并查看诊断报告</button>
+    </div>
+  </div>
+
+  <!-- 诊断结果面板 -->
+  <div class="result-panel" id="result-panel"></div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const DATA = {"课程名称": "现代决策学：从认知觉醒到复杂权衡", "用途": "每单元前置自测：用于判断学习者是否已掌握该单元核心概念，从而决定是否需要选修该课。", "设计原则": ["题目全部基于提出该理论或揭示该偏误的真实科学史事件、经典实验或著名原型案例出题，杜绝自编情景导致多概念套用。", "每个选项在长度（字数极差严格控制）、专业术语（严禁正确项专有而干扰项口语化，严禁使用括号）及情绪倾向（全部中立冷静）上绝对拉平。", "彻底摒弃『以下选项最XXX的是』等主观程度比较句式，统一采用客观的现象判定、因果机制推导或边界条件判定；干扰项具有明确的认知偏误或逻辑事实破绽，确保正确答案唯一闭合。", "正确答案在 A/B/C/D 之间均匀分布（A11/B11/C11/D12），且同一单元内三题答案字母完全互不相同。"], "评分规则": {"单题计分": "每题答对得1分，答错得0分。", "单元判定": "每单元答对率 ≥ 2/3（3题答对2题及以上）视为『已掌握』，建议跳过；低于该线视为『建议学习』。", "整卷判定": "全部单元中『建议学习』的单元数 > 5，建议完整学习本课程；3~5 个建议按需补课；≤2 个可按薄弱单元定向学习。"}, "模块": [{"模块编号": "Module 1", "模块名称": "信息免疫力：看清世界本来的样子", "单元": [{"编号": "U1", "名称": "事实、观点与证据链", "通过线": "3题答对≥2题", "题目": [{"id": "U1-Q1", "题干": "1610年伽利略在《星际信使》中记录天体观测，引发与经院哲学的激烈争辩。下列陈述中属于具备主体间性且可被独立复核的客观事实的是：", "选项": {"A": "记录连续多夜观测中木星近旁四颗光点的相对位移数值", "B": "认定宇宙所有天体在本质上均符合完全对称的几何外形", "C": "主张经典经院哲学体系已穷尽天体宏观运转的终极法则", "D": "断定人工磨制透镜必然诱导人类视觉中枢产生虚妄伪影"}, "答案": "A", "考察概念": "事实与观点", "答错说明": "混淆了可观测、可测量的客观经验数据与基于先验教条的主观理论判定。"}, {"id": "U1-Q2", "题干": "大众健康传播中长期流传每日必须饮用八杯水的准则。在针对原始文献的证据链复核中，判定该主张存在信源断章截取的客观依据是：", "选项": {"A": "统计受试群体在增加额外饮水量后机体代谢指标的显著改变", "B": "查证原始指导文件中包含食物已提供大部分水分的关键限定", "C": "对比多国现行膳食指南中关于每日推荐饮水总量的文本差异", "D": "收集受试者长期遵循该饮水模式后疲劳缓解程度的量表数据"}, "答案": "B", "考察概念": "证据等级、信源溯源", "答错说明": "依赖横向观点比对或表象数据验证，而未核查一手文献及其上下文限定条件。"}, {"id": "U1-Q3", "题干": "1967年国际顶级医学期刊发表综述将心血管疾病归咎于脂肪并淡化糖类风险。根据科研伦理与证据审计，判定该文献存在结构性利益冲突的客观事实是：", "选项": {"A": "研究结论在发表后十年内被主流学术界同行引用的总体频次规模", "B": "论文正文图表展现形式与当时流行病学统计制图规范的契合程度", "C": "行业协会秘密全额资助课题研究且论文未进行资金利益相关披露", "D": "论文作者团队在心血管病理领域持有的崇高学术声望与终身教职"}, "答案": "C", "考察概念": "利益冲突、专业边界", "答错说明": "忽视了资助方商业立场的隐蔽渗透，误将学术权威身份或引用规模等同于研究客观中立。"}]}, {"编号": "U2", "名称": "样本盲区与算法茧房", "通过线": "3题答对≥2题", "题目": [{"id": "U2-Q1", "题干": "1936年美国大选前，《文学文摘》依据电话簿与豪车登记册发放千万份问卷，回收230余万份后预测兰登将大胜罗斯福，结果罗斯福以压倒性优势连任；而盖洛普仅抽样数千人便准确预测了选举结果。导致《文学文摘》民调结论失效的核心统计学缺陷是：", "选项": {"A": "抽样框排除了大量低收入群体，导致调研样本严重缺乏代表性。", "B": "问卷回收总量未达选民法定比例，导致统计推论存在极大误差。", "C": "问卷设问带有强烈的引导倾向，诱发了受访群体的顺从性回答。", "D": "调查周期过长导致既有民意逆转，未能捕捉临近投票期的动态。"}, "答案": "A", "考察概念": "选择偏差、抽样框偏倚与代表性样本", "答错说明": "把抽样框本身的系统性阶层偏差，误判为样本量不足、问卷设问诱导或选民民意突变。"}, {"id": "U2-Q2", "题干": "二战期间，盟军统计研究组分析返航轰炸机的受损分布，发现机翼弹孔密集而发动机舱完好，军方提议加固机翼。统计学家沃德力排众议，建议重点加固发动机舱。沃德得出该结论所依据的统计推论是：", "选项": {"A": "机翼受损面积显著大于动力舱，加固非致命部位属于无效防御。", "B": "评估容易受初始观察特征锚定，未建立未受攻击战机基准对照。", "C": "统计样本仅包含成功返航战机，关键要害中弹的飞机早已坠毁。", "D": "防空火力在后续交锋中将校准，既有受损分布会丧失参考价值。"}, "答案": "C", "考察概念": "幸存者偏差、沉默证据与隐形分母", "答错说明": "忽视了未返航飞机构成的隐形分母，将观测样本的选择性截断误归为表面面积对比、心理锚定或未来战术演变。"}, {"id": "U2-Q3", "题干": "学者桑斯坦在《信息乌托邦》中指出，算法个性化推送容易让公众陷入信息茧房与回音室。在社交网络平台中，促成该认知闭环形成的关键算法机制是：", "选项": {"A": "算法优先分发商业变现内容，系统性挤压了严肃议题讨论空间。", "B": "语义识别模型难以解析隐喻，对非主流观点的分类准确率偏低。", "C": "推荐引擎过度侧重即时热点，导致用户对长周期事实感知断裂。", "D": "算法基于互动历史强化同质观点，协同过滤掉立场相左的声音。"}, "答案": "D", "考察概念": "信息茧房、回音室效应与协同过滤算法机制", "答错说明": "未识别出算法基于互动历史进行同质加权与反向过滤的自强化闭环，把信息茧房误归为商业变现、语义识别局限或即时热点偏好。"}]}, {"编号": "U3", "名称": "相关、因果与归因错觉", "通过线": "3题答对≥2题", "题目": [{"id": "U3-Q1", "题干": "20世纪中叶流行病学调查曾发现饮用咖啡者罹患心脏病的比例显著偏高，后经严密对照发现吸烟者往往伴随大量饮用咖啡，控制吸烟变量后该关联随即消失。导致早期推论失真的因果逻辑破绽是：", "选项": {"A": "忽略了同时影响咖啡摄入与心脏病发病的共存混杂变量", "B": "颠倒了心脏病发作与咖啡摄入行为之间的先后因果方向", "C": "误将时间上相继发生的两组独立事件判定为确定因果链", "D": "混淆了两次生理指标监测过程中的随机波动与均值回归"}, "答案": "A", "考察概念": "混杂变量、相关与因果", "答错说明": "未能识别吸烟这一同时影响咖啡摄入与心脏病发病的混杂变量，误将统计相关等同于因果关系。"}, {"id": "U3-Q2", "题干": "丹尼尔·卡尼曼在分析以色列空军飞行训练案例时指出，学员在极佳动作受表扬后退步、失误受痛斥后好转的统计学根源是：", "选项": {"A": "表扬削弱了学员的危机意识，严厉批评提升了操作警惕性", "B": "极端表现受随机扰动影响，后续测试自然向基准均值靠拢", "C": "相邻两次飞行观测间隔过短，无法反映学员真实技能水平", "D": "高强度飞行过度消耗体能，生理状态起伏主导了成绩波动"}, "答案": "B", "考察概念": "均值回归、随机波动", "答错说明": "将极端表现后自然出现的向均值回归现象，错误归因为外部表扬或批评干预产生的直接效果。"}, {"id": "U3-Q3", "题干": "1747年英国海军军医詹姆斯·林德在军舰上开展坏血病试验：挑选病情相近的12名水手同吃同住，分为6组分别给予不同补充剂，唯独食用柑橘组快速康复。该试验能够确立治疗因果关系的核心设计是：", "选项": {"A": "依靠古典医学理论推导出了酸性物质对于坏血病的治疗机理", "B": "详实记录了水手服药之后身体症状由重转轻的时间先后顺序", "C": "依据患病水手在接受救治前后自身症状好转的单一纵向对比", "D": "在基线环境保持一致的前提下同步引入了平行的干预对照组"}, "答案": "D", "考察概念": "对照设计、因果推断", "答错说明": "未能理解确立因果推断必须在控制基线环境的前提下引入平行对照组，以有效排除外部混杂因素与自愈假象。"}]}]}, {"模块编号": "Module 2", "模块名称": "心智与环境：驯服大脑的出厂设置", "单元": [{"编号": "U4", "名称": "直觉陷阱：搜集与评估时的盲区", "通过线": "3题答对≥2题", "题目": [{"id": "U4-Q1", "题干": "1960年认知心理学家彼得·沃森开展“2-4-6”规律发现实验：主试告知给出的三元数组符合某项隐秘规则，要求被试提出新的三元数组进行测试以推导该规则。实际上隐藏规则仅为简单的“任意升序排列”，但绝大多数被试预设“连续偶数递增”等猜想后，持续测试4-6-8或10-12-14等正向数组并获得肯定反馈，却极少提出可能被否定的反向数组进行试错，导致长期陷入误区。该实验揭示的核心认知偏误机制是：", "选项": {"A": "依赖数列表象特征进行局部的经验归纳而系统忽略深层共性", "B": "仅倾向搜寻符合既有假设的正向证据而系统性回避反例证伪", "C": "固守初始呈现数值作为定量评估基准而后续思维调整不充分", "D": "依据生动具体案例的提取容易程度而主观夸大潜在发生概率"}, "答案": "B", "考察概念": "确认偏误、假说检验与证伪原则", "答错说明": "未能识别被试在检验假说时只搜集证实性证据的认知倾向，误将其归因于经验归纳局限、初始数值锚定或案例可得性干扰。"}, {"id": "U4-Q2", "题干": "1974年阿莫斯·特沃斯基与丹尼尔·卡尼曼开展经典实验：让被试旋转一个预先被设定在10或65停下的幸运轮盘，随后要求被试判断联合国中非洲成员国比例是高于还是低于该轮盘数字，并给出具体估计值。结果轮盘停在10的受试组估值中位数为25%，而停在65的受试组估值中位数高达45%。该实验表明任意给出的初始数值扭曲后续定量判断的核心机制是：", "选项": {"A": "极端数值以高度鲜明性占据短期记忆而主导了后续提取概率", "B": "受试群体预设实验线索具备权威关联性而系统放弃独立推论", "C": "初始无关数值充当了思维起步锚点而后续认知调整严重不足", "D": "问题表述的语义框架诱发了得失感知而逆转了个体风险偏好"}, "答案": "C", "考察概念": "锚定效应、启发式偏差与调整不足", "答错说明": "未能理解无关数值充当了评估起步参照点且后续调整显著不足，误将锚定效应归结为记忆可得性、权威线索推论或表述框架反转。"}, {"id": "U4-Q3", "题干": "1981年丹尼尔·卡尼曼与阿莫斯·特沃斯基开展著名的“亚洲疾病问题”实验：假设某种疾病爆发将导致600人丧生。当应对方案表述为“确定救活200人”时，多数受试者倾向选择确定性方案；而当实质完全相同的方案表述为“确定死亡400人”时，绝大多数受试者转而倾向选择具有不确定性的冒险方案。导致受试群体风险偏好发生系统性反转的认知根源是：", "选项": {"A": "受试者对极端偶发概率过度加权导致期望效用评估严重失真", "B": "初始给出的具体伤亡数字充当锚点锁定了后续心智推演区间", "C": "决策者仅关注与直觉预判契合的描述而忽视客观概率的权衡", "D": "表述框架重设心理参照点使收益域规避风险损失域偏好冒险"}, "答案": "D", "考察概念": "框架效应、心理参照点与前景理论", "答错说明": "未能识别不同表述语境通过重设得失参照点系统逆转了风险偏好，误将框架效应混淆为概率加权偏差、数值锚定或确认偏误。"}]}, {"编号": "U5", "名称": "止损的艺术：跨越沉没成本与损失厌恶", "通过线": "3题答对≥2题", "题目": [{"id": "U5-Q1", "题干": "20世纪60至70年代，英法两国联合研发协和式超音速客机。在研发成本严重超支且商业运营已确证无法盈利后，两国决策层仍以“已投入巨资不可半途而废”为由持续追加预算数十年。导致该项目陷入“协和谬误”的核心认知机制是：", "选项": {"A": "将既往不可收回支出视作依据，背离了面向未来边际损益评估。", "B": "低估新技术商业化的周期阻力，未能预判外部能源危机的冲击。", "C": "受制于跨国联合研发权责困境，缺乏及时终止项目的制衡机制。", "D": "过度追求国家旗舰工程的声誉，忽视了民航运营市场客观规律。"}, "答案": "A", "考察概念": "沉没成本谬误与边际决策分析", "答错说明": "未能识别出决策被已经发生且无法收回的历史投入绑架，将沉没成本误当作继续投资的依据，而非基于未来的边际成本与收益做出理性决断。"}, {"id": "U5-Q2", "题干": "卡尼曼与特沃斯基在前景理论研究中设计了经典抛硬币实验：硬币正面朝上输100美元、背面朝上赢100美元，绝大多数受试者坚决拒绝参与；只有当获胜收益提高至200美元以上时，多数人才愿意接受博弈。该实验揭示的核心心理规律是：", "选项": {"A": "个体在面对潜在确定性收益时，更倾向于采取极度保守的策略。", "B": "同等规模损失引发的负向效用，显著高于等量收益的正向效用。", "C": "个体对既有资产产生主观依恋，凭空抬高对其持有物品的估值。", "D": "决策者受直观即时情绪所驱动，系统性高估随机事件发生概率。"}, "答案": "B", "考察概念": "损失厌恶与前景理论价值函数", "答错说明": "未能理解损失厌恶的核心规律，即同等数额的损失带来的负效用心理折损显著大于等量收益带来的正效用，误将其归因于确定性偏好、禀赋效应或情绪概率扭曲。"}, {"id": "U5-Q3", "题干": "1990年理查德·塞勒与卡尼曼等人在康奈尔大学开展经典实验：随机分到马克杯的学生作为卖方，平均最低出价为5.25美元；而未分到杯子的学生作为买方，平均最高出价仅2.25美元。导致买卖双方估值产生显著鸿沟的心理机制是：", "选项": {"A": "买方受到外部参考标价的锚定，系统性压低对非必需品的估价。", "B": "卖方试图补偿获取物品的成本，将沉没支出直接转嫁至出价中。", "C": "拥有权状态诱发个体损失厌恶，显著抬高对已持有物品的估值。", "D": "交易主体因现状偏见产生惰性，本能抗拒打破初始平衡的交换。"}, "答案": "C", "考察概念": "禀赋效应与拥有权心理机制", "答错说明": "未能识别拥有权本身会触发损失厌恶并凭空抬高物品估值的“禀赋效应”，误将卖方的高要价归因为外部价格锚定、沉没成本转嫁或现状交易惰性。"}]}, {"编号": "U6", "名称": "冷热状态与选择架构（Nudge）", "通过线": "3题答对≥2题", "题目": [{"id": "U6-Q1", "题干": "行为经济学家乔治·勒温斯坦在冷热共情差距的经典实验中发现，受试者在冷静饱腹时制订节食方案表现得极具信心，在面临实际饥饿时却普遍失控违背初衷。该实验揭示的核心认知规律是：", "选项": {"A": "冷静状态下的个体系统性低估了内脏冲动对自我控制的瓦解程度", "B": "饱腹状态下的个体系统性高估了未来饥饿诱惑对行为的干扰强度", "C": "节食方案的执行受挫主要源于个体对食物热量摄入缺乏精准计算", "D": "饥饿状态下的生理冲动使得个体认知系统完全丧失长期规划能力"}, "答案": "A", "考察概念": "冷热共情差距、决策冲动与意志力错觉", "答错说明": "未识别出冷热共情差距的认知不对称性，误将人在热状态下的决策失控归因为信息计算失误、诱惑强度预判反向偏误或大脑认知功能彻底崩溃。"}, {"id": "U6-Q2", "题干": "20世纪60年代英国将含有一氧化碳的剧毒煤气全面替换为无毒天然气。该举措在未改善公众整体心理健康水平的前提下，使全国自杀总人数长期下降超三成且未引发其他手段替代。该历史案例证实的核心决策规律是：", "选项": {"A": "特定行为途径受阻后个体必然会积极寻求等效替代方案达成目标", "B": "微调外部物理环境无法扭转由内在心理状态主导的长期行为倾向", "C": "提升行为实施的物理摩擦力能够有效阻断非理性决策的即时执行", "D": "普及潜在危害认知是促使群体自发放弃危险决策行为的根本前提"}, "答案": "C", "考察概念": "摩擦力设计、情境预防与冲动阻断", "答错说明": "忽视了物理摩擦力对热状态下冲动决策的关键阻断作用，陷入了手段替代必然发生、纯内在动机决定论或单纯依赖认知说服的误区。"}, {"id": "U6-Q3", "题干": "2003年埃里克·约翰逊与丹尼尔·戈德斯坦在《科学》发表关于欧洲多国器官捐献的研究指出，需要主动登记加入的德国与丹麦登记率仅约百分之十五，而预设默认加入且需主动声明才退出的奥地利与法国登记率超过百分之九十九。导致这一悬殊差异的核心机制是：", "选项": {"A": "各国公民在利他主义奉献精神与道德认同水平上存在本质性差距", "B": "公共医疗救治技术水平与透明机制决定了公众参与捐献的信任度", "C": "国家法律强制惩戒措施的严厉程度直接规制了个体公民的选择权", "D": "预设默认选项利用决策惯性与认知阻力锁定了绝大多数选择结果"}, "答案": "D", "考察概念": "助推、默认选项与选择架构", "答错说明": "把选择架构中默认选项带来的行为惯性与认知阻力机制，错误归因为国民道德水平、医疗透明信任度或法律强制力等外部宏观因素。"}]}]}, {"模块编号": "Module 3", "模块名称": "概率与不对称风险：在迷雾中下注", "单元": [{"编号": "U7", "名称": "基准率与贝叶斯更新", "通过线": "3题答对≥2题", "题目": [{"id": "U7-Q1", "题干": "1972年丹尼尔·卡尼曼与阿莫斯·特沃斯基在经典出租车实验中指出：某城出租车中85%为绿色、15%为蓝色。夜间肇事逃逸案的目击证人指认肇事车为蓝色，其实验室辨识准确率为80%。多数受试者判定肇事车为蓝色的概率为80%，而依据贝叶斯定理推导实际仅约41%。受试者产生这一系统性认知偏差的核心机制是：", "选项": {"A": "过度聚焦个案证词的似然性证据，系统性忽略了总体背景的基础概率", "B": "错误假定目击证人的感官辨识能力，在夜间低能见度环境下面临衰减", "C": "误将两次独立观测结果相混淆关联，陷入了小数定律与均值回归偏差", "D": "混淆了先验分布与主观效用权重，放大了极端小概率事件的危险程度"}, "答案": "A", "考察概念": "基准率忽略、似然性证据与先验概率", "答错说明": "未能识别决策者在面对具体个案线索时容易完全忽视总体大盘概率的基准率忽略偏差，误将认知偏差归因为外界感官退化、均值回归或效用主观加权。"}, {"id": "U7-Q2", "题干": "1982年大卫·埃迪在临床医学决策研究中指出：某罕见病在无症状人群中的基准患病率为0.1%，筛查试剂的灵敏度与特异度均为99%。当一名受检者初筛结果呈阳性时，依据贝叶斯定理推导其实际患病概率仅约9%，但近九成受访医生却断言其患病概率高达90%以上。导致受访医生出现严重判断失误的核心机制是：", "选项": {"A": "误将多次独立试验的统计规律关联，陷入了赌徒谬误与均值回归误区", "B": "混淆了受检者患病时的检测阳性概率，与检测阳性时的实际患病概率", "C": "因生动个案触发可得性启发式偏差，主观放大了罕见病发病危险程度", "D": "受合取谬误影响错误判定复合病症，联合发生概率高于单项病症概率"}, "答案": "B", "考察概念": "贝叶斯更新、条件概率混淆与假阳性反直觉", "答错说明": "未能理解条件概率的方向性差异，混淆了似然度与后验概率，将患病前提下的阳性率错误等同于阳性前提下的患病率，而未将其归因于其他概率谬误。"}, {"id": "U7-Q3", "题干": "德国认知科学家盖德·吉仁泽在临床决策与司法统计研究中发现：当用“每1000人中有10人患病且其中8人呈阳性、未患病的990人中有99人呈阳性”等自然频数表述，替代抽象的条件概率百分比时，专业人员推断后验概率的准确率大幅跃升。自然频数能够有效消除概率认知遮蔽的核心原因是：", "选项": {"A": "彻底消除了临床检测过程中的系统误差，规避了小样本随机抽样噪音", "B": "将概率推断简化为确定性单向因果逻辑，规避了风险评估的不确定性", "C": "促使决策者对新输入证据做二元是非判定，排除了置信区间动态扰动", "D": "将抽象条件概率转化为具体的发生人次，直接保留了先验基准率信息"}, "答案": "D", "考察概念": "自然频数、信息表征架构与贝叶斯置信度更新", "答错说明": "忽视了自然频数的核心优势在于通过具体的联合频数天然承载了先验基准率，消除了抽象乘法与归一化计算门槛，误将其理解为消除客观测量误差、消解不确定性或强化非黑即白的极端跳跃。"}]}, {"编号": "U8", "名称": "期望值、赔率与尾部风险", "通过线": "3题答对≥2题", "题目": [{"id": "U8-Q1", "题干": "纳西姆·塔勒布在《随机漫步的傻瓜》中提出著名的俄罗斯轮盘赌思维实验：假设左轮手枪六个弹巢中仅装有一颗子弹，参与者扣动一次扳机有六分之五的概率获得巨额奖金，六分之一的概率中弹丧命。尽管该博弈单次计算的数学期望值显著为正，但在严密的决策分析中该赌局被绝对否决。导致数学期望值在此失效的根本逻辑是：", "选项": {"A": "统计胜率与单次结果间存在随机波动导致最终收益无法被预期", "B": "致命性下行尾部风险具有不可逆性直接摧毁后续所有存续可能", "C": "边际效用递减机制使得高额奖金收益无法完全弥补其潜在损失", "D": "样本量匮乏使得大数定律无法在单次离散事件中实现均值收敛"}, "答案": "B", "考察概念": "尾部风险、破产风险与生存底线", "答错说明": "未能识别不可逆破产风险对期望值计算的前提颠覆，误将绝对拒绝博弈的原因归结为统计波动、边际效用递减或大数定律未起作用。"}, {"id": "U8-Q2", "题干": "物理学家奥勒·彼得斯在论证遍历性破缺时提出经典硬币博弈：抛出正面本金增加百分之五十，抛出反面本金减少百分之四十。若一百人同时各掷一次，群体空间平均收益呈现显著增长；若由同一人连续掷一百次，个人资产的时间平均结果却必然走向归零毁灭。导致空间平均与时间平均出现根本分歧的机制是：", "选项": {"A": "群体样本充分满足大数定律而单人连续序列未达到统计收敛界限", "B": "各次独立抛掷的随机扰动使得单人长期收益必然回归理论期望值", "C": "单人时间序列存在路径依赖产生复利回撤而群体各样本彼此独立", "D": "连续下注引发的损失厌恶情绪系统性破坏了理性决策的执行准则"}, "答案": "C", "考察概念": "遍历性破缺、时间平均与空间平均、复利路径依赖", "答错说明": "混淆了群体静态空间平均与个人动态时间平均的本质差异，未能理解单人在乘法过程中的路径依赖与复利回撤，误将其归因于样本量不足、均值回归或情绪偏差。"}, {"id": "U8-Q3", "题干": "1998年由诺贝尔经济学奖得主领衔的华尔街长期资本管理公司，基于严密量化模型利用高倍杠杆捕捉债券市场微弱利差套利，连续数年获取高额收益；但在俄罗斯主权债务违约的极端黑天鹅事件冲击下，数周内迅速遭遇毁灭性崩盘。该经典金融史案例证实的核心决策结构原则是：", "选项": {"A": "依赖历史回测修正量化模型即可精准预判并规避极端尾部冲击", "B": "通过跨市场分散配置资产即可在高杠杆下彻底消除系统性风险", "C": "利用高倍杠杆放大确定性微弱利差是穿越周期的稳健策略选择", "D": "构建下行损失严格封顶而上行收益充分开放的非对称安全边际"}, "答案": "D", "考察概念": "非对称收益、杠杆尾部风险与安全边际", "答错说明": "未能认识到极端尾部风险在杠杆放大下的致命毁灭性，忽视了下行严格封顶的安全边际价值，误以为靠参数优化、表面分散配置或放大杠杆利差能对抗黑天鹅。"}]}, {"编号": "U9", "名称": "校准训练：克服过度自信", "通过线": "3题答对≥2题", "题目": [{"id": "U9-Q1", "题干": "1957年悉尼歌剧院工程开工时原定预算700万澳元并计划1963年完工，最终历经多次方案调整直至1973年才竣工，实际耗资达1.02亿澳元，工期延误十年且超支逾十四倍。丹尼尔·卡尼曼等学者将此类现象归结为典型的规划谬误。决策者在评估项目时陷入该认知陷阱的核心机制是：", "选项": {"A": "评估者过度聚焦于理想执行路径而系统低估不可预见的意外阻力", "B": "承建方为获取立项竞标资格而蓄意隐匿潜在开销进行策略性低报", "C": "复杂工程涵盖超量未定干扰变量而在客观物理维度完全无法预测", "D": "出资方在项目执行中途持续追加功能指标而倒逼成本线不断重设"}, "答案": "A", "考察概念": "规划谬误、过度自信与内部视角", "答错说明": "未能识别规划谬误源于聚焦理想路径而忽视意外阻力的系统性认知偏差，误将其归因于承建方策略性瞒报、客观环境不可预测或出资方中途追加需求。"}, {"id": "U9-Q2", "题干": "20世纪70年代萨拉·利希滕斯坦与巴鲁克·菲施霍夫等学者开展系列校准实验：要求受试者对未知常识数值给出90%置信区间，即确保真实数值有90%的概率落在给定的上下限之间。统计结果显示，受试者声称具备90%确定性的估计区间，实际命中率普遍仅为30%至50%。该经典实验直接证实的认知规律是：", "选项": {"A": "受试群体仅偏好检索验证性证据而刻意忽视反常识边缘数值", "B": "个体普遍高估自身认知精确度而给出了过窄的容错估计范围", "C": "被试群体缺乏专业统计学背景而误将样本极值视作总体均值", "D": "极端罕见数值的生动表象占据短期记忆而诱发概率高估偏差"}, "答案": "B", "考察概念": "过度自信、过度精确与置信区间校准", "答错说明": "未能识别受试者因高估自身认知精确度而导致置信区间过窄的过度自信偏误，误将其归因于确认偏误、统计背景匮乏或可得性启发式偏差。"}, {"id": "U9-Q3", "题干": "丹尼尔·卡尼曼在《思考，快与慢》中记录了一次课程编写经历：编写团队根据当前的教案进度，乐观预测仅需一至两年即可完工；但当卡尼曼向资深专家询问同类课程编撰的历史分布数据时，专家指出类似团队平均耗时七年且有四成团队彻底放弃。要克服此类基于内部视角的预测偏差，对项目可行性进行客观校准的核心依据是：", "选项": {"A": "将微观执行环节拆解至具体日程以强化各阶段推进的确定性", "B": "设定更为严苛的截止期限以通过时间压力倒逼团队执行效率", "C": "引入同类项目历史基准分布数据以客观测算耗时与淘汰概率", "D": "建立高频日常工作进度追踪机制以实时监控任务完成度差距"}, "答案": "C", "考察概念": "外部视角、基准比率与参考类别预测", "答错说明": "未能理解克服内部视角必须依赖同类项目的客观历史基准分布数据，误以为可以通过拆解微观日程、施加截止期压力或高频进度追踪来消除预测偏差。"}]}]}, {"模块编号": "Module 4", "模块名称": "权衡、试验与敏捷行动：破解两难困境", "单元": [{"编号": "U10", "名称": "机会成本与多目标价值权衡", "通过线": "3题答对≥2题", "题目": [{"id": "U10-Q1", "题干": "1850年法国经济学家弗雷德里克·巴斯夏在《看得见的与看不见的》中提出著名的“破窗谬误”：顽童砸碎面包店橱窗，围观者认为这带来了六法郎的修缮开销，进而刺激玻璃工就业并拉动货币流转；巴斯夏指出这忽视了店主本可用这笔款项购置鞋履或书籍。从决策与经济机制审视，破窗论证之所以陷入逻辑谬误，其根本症结在于：", "选项": {"A": "仅核算显性支出的局部流转而忽略资源投向替代用途的隐性代价", "B": "假定封闭系统内的货币循环加速能直接驱动全社会真实财富增长", "C": "将存量实物资产的损耗重置等同于社会生产性资本的实质性扩张", "D": "视无端消耗的劳力要素投入为衡量社会真实福利水平的有效依据"}, "答案": "A", "考察概念": "机会成本、看得见的与看不见的、隐性代价", "答错说明": "未能识别破窗谬误源于忽视了资源投向其他替代用途所放弃的隐性机会成本，误将其归因于货币流通假设、资本形态混淆或福利评估指标偏差。"}, {"id": "U10-Q2", "题干": "经济学中的蒙代尔-克鲁格曼三元悖论指出资本自由流动、汇率稳定与货币政策独立性不可兼得，该不可能性定理深刻映射于多目标价值权衡领域：资产配置中的高收益、高流动性与本金绝对安全构成经典的不可能三角。从多目标决策与帕累托有效前沿的逻辑边界审视，理性决策者处理冲突目标的根本准则是：", "选项": {"A": "试图通过技术创新在单一方案中同时实现所有互斥目标的最大化", "B": "假定提升信息获取与计算精度即可彻底消除各目标间的排他冲突", "C": "厘清各维目标在帕累托前沿上的替代边界并确立不可妥协的底线", "D": "视多维目标冲突为无序博弈而采取随机折中策略规避实质性权衡"}, "答案": "C", "考察概念": "多目标决策、帕累托前沿、不可能三角、底线约束", "答错说明": "未能识别不可能三角在帕累托有效前沿上的结构性权衡本质，忽视了建立优先级与底线约束的必要性，误以为依靠技术创新能消除互斥、依靠算法精度能回避取舍或应当采取无序折中。"}, {"id": "U10-Q3", "题干": "1971年诺贝尔经济学奖得主赫伯特·西蒙提出著名论断：信息所消耗的是接收者的注意力，因此信息的过度丰富必然导致注意力的稀缺。在商业与日常决策中，面对大量零元免费商品与低价促销信息的诱惑，个体往往深陷其中而未察觉实际代价。基于西蒙注意力稀缺与隐性成本理论审视，免费机制对决策者造成的根本资源损耗是：", "选项": {"A": "误判低价商品的物理损耗速度而承担过高的后续维修与重置开销", "B": "忽视服务协议中的排他让渡条款导致个人信息与隐私权益被侵蚀", "C": "受商家的诱导性促销策略影响而无序透支短期内的直接货币预算", "D": "将具有高度稀缺性的时间与认知带宽无形置换为低效的微小收益"}, "答案": "D", "考察概念": "注意力稀缺、隐形成本、机会成本", "答错说明": "误将免费代价局限在物理质量折损、个人隐私外泄或直接货币诱导透支等可见维度，忽视了时间和认知注意力这类不可再生稀缺资源的巨大隐性置换成本。"}]}, {"编号": "U11", "名称": "可逆性、信息价值与小步试验", "通过线": "3题答对≥2题", "题目": [{"id": "U11-Q1", "题干": "杰夫·贝佐斯在1997年以来的亚马逊致股东信中提出著名的决策分类模型：将不可逆且后果深远的事项定义为第一类单向门决策，将高度可逆且便于修正的事项定义为第二类双向门决策。贝佐斯指出大型组织最常见的系统性决策失效，是对双向门决策过度套用沉重的单向门审批研判流程。依据该分类模型，实现组织高效敏捷运转的核心治理机制是：", "选项": {"A": "对可逆事项充分下放权限小步试错而对不可逆决策保持审慎研判", "B": "对所有经营决策实施严格层级审批以消除执行过程中的试错风险", "C": "对不可逆重大决策持续追加信息搜集以期彻底消除外部不确定性", "D": "对所有决策类型全面实行去中心化放权以达成全局步调快速推进"}, "答案": "A", "考察概念": "单向门与双向门、决策可逆性、分析瘫痪与速度权衡", "答错说明": "未能理解决策可逆性对组织授权与速度的关键意义，误以为应全面实行官僚审批以消除试错风险、通过无限搜集信息强行消除不可逆性，或是无差别彻底放权而忽视不可逆重大决策的审慎研判。"}, {"id": "U11-Q2", "题干": "1999年鞋类电商Zappos创始人尼克·斯威姆恩为验证消费者线上购鞋意愿，并未提前投入巨资自建仓储、采购库存与开发物流系统，而是前往本地实体鞋店拍下鞋款照片上传至简陋网页；一旦产生真实订单，便直接去实体店原价买下打包寄出。从最小可行性试验的决策逻辑分析，该做法的核心价值在于：", "选项": {"A": "通过提前搭建重资产供应链以确保全流程履约具备规模盈利能力", "B": "通过极小沉没成本验证真实支付意愿以排除市场伪需求根本风险", "C": "通过实体店原价采买赚取微薄进销差价以维持早期业务自我造血", "D": "通过长期维持人工采购的极简模式以彻底规避规模扩张管理负荷"}, "答案": "B", "考察概念": "最小可行性试验、信息价值与真实行为验证", "答错说明": "未能识别最小可行性试验的核心在于用极低沉没成本验证真实支付意愿与核心需求假设，误以为应过早投入重资产搭建供应链、误将零售原价履约当做赚取差价的盈利模型，或误将其视作规避组织扩张的永久运营方式。"}, {"id": "U11-Q3", "题干": "在珠穆朗玛峰高海拔攀登中存在著名的下午两点登顶铁律：无论当时距离顶峰还剩多少米、天气看起来多么良好，只要未在下午两点前登顶，所有队员必须立刻无条件折返下撤。从行为决策与风险控制视角来看，确立该项事前止损规则的核心机制是：", "选项": {"A": "依据现场即时体能与局部气象动态调整行动以捕捉潜在登顶机会", "B": "依据前期沉没成本与剩余登顶距离灵活顺延预设的最后折返时限", "C": "依据现场团队民主表决形成的共识消除决策分歧以凝聚冲顶意愿", "D": "依据事前冷状态设立的刚性规则以阻断现场冲动诱发的承诺升级"}, "答案": "D", "考察概念": "预设停止规则、冷热状态脱节、沉没成本与承诺升级", "答错说明": "未能理解事前停止规则是用冷状态下的刚性契约克服现场情绪冲动、沉没成本与承诺升级陷阱，误以为应在极端热状态下依赖即时体能和气象评估微调、基于已投入的沉没成本顺延时限，或试图通过现场民主表决妥协安全底线。"}]}]}, {"模块编号": "Module 5", "模块名称": "博弈、群策与人机协同：在复杂系统中进化", "单元": [{"编号": "U12", "名称": "策略互动与博弈思维", "通过线": "3题答对≥2题", "题目": [{"id": "U12-Q1", "题干": "在单次囚徒困境或剧场效应中，参与者追求个体最优往往诱发集体非理性并陷入双输困境。1980年罗伯特·阿克塞尔罗德举办重复囚徒困境计算机锦标赛，汇集全球学者提交的策略程序进行循环博弈，最终极其简洁的“以牙还牙”策略夺得总分第一。该策略能够打破背叛僵局并促成长期正和合作的关键机制是：", "选项": {"A": "依靠率先发起背叛以剥夺对手存续筹码从而确立绝对收益优势", "B": "首轮主动合作且对背叛即时惩罚并在对方重新合作时迅速宽容", "C": "借助随机扰动隐藏真实行动轨迹以防止对手推断自身行为模式", "D": "无论对手采取何种策略均无条件维持合作以感化对方协同行动"}, "答案": "B", "考察概念": "囚徒困境、重复博弈、正和博弈与以牙还牙策略", "答错说明": "未能理解重复博弈中促成合作的关键在于善意先发、即时报复背叛与迅速宽容的确定性机制，误以为单方面掠夺、随机不可测或无底线妥协能够维持长期合作。"}, {"id": "U12-Q2", "题干": "18世纪末英国政府向澳大利亚流放犯人。早期政府按登船人数向私营船主预付全额运费，导致船主克扣口粮药品，犯人航运死亡率长期超过30%；后经埃德温·查德威克等建议进行制度改革，运费变更为只有罪犯活着走下澳大利亚码头才予以结算，犯人存活率随即跃升至98%以上。该制度改革能够彻底扭转危机的关键机制是：", "选项": {"A": "通过强化官方道德倡导与司法惩戒威慑从外部约束私人船长行为", "B": "借助引入第三方独立医疗监理机构对航行过程实施全程封闭监督", "C": "将承运船长的自利动机与犯人生存目标紧密绑定以实现激励相容", "D": "提高单次航运的预付保证金比例以抵押赔偿航程中的非正常损耗"}, "答案": "C", "考察概念": "激励相容、机制设计与信息不对称", "答错说明": "未能理解机制设计的核心在于重塑利益分配规则以实现自利与全局目标的激励相容，误以为依赖道德说教、行政监督或前置押金能够解决委托代理危机。"}, {"id": "U12-Q3", "题干": "在博弈论与机制设计理论中，“一人切蛋糕、另一人优先选”是解决双人分配争端的经典基准规则。即使在双方缺乏信任且完全自利的极端前提下，该规则依然能够自发达成令双方均无异议的公平分割。该机制能够彻底消除分配嫉妒的博弈逻辑是：", "选项": {"A": "依靠双方对公序良俗的道德共识在博弈中自发克制自私索取冲动", "B": "切分主体精湛的操作技能能够确保物理分割层面达成绝对对称性", "C": "优先挑选方的利他心理促使其在选择时主动兼顾切分主体的利益", "D": "切分主体预判对方必选较大份额因而在自利驱动下竭力做到均等"}, "答案": "D", "考察概念": "无嫉妒分割、逆向归纳与机制设计", "答错说明": "未能认识到分蛋糕机制是通过将挑选权让渡给对方，利用切分者的自利本能倒逼其主动追求均等，误将公平的实现归因于道德约束、精湛技术或利他心理。"}]}, {"编号": "U13", "名称": "群体盲区与高效群策机制", "通过线": "3题答对≥2题", "题目": [{"id": "U13-Q1", "题干": "1961年美国肯尼迪政府策划入侵古巴的“猪湾事件”，内阁决策团队汇集了顶尖智囊与国家安全精英，但在凝聚力极高且领导者已定调的封闭氛围中，参谋人员主动压制并自我审查怀疑异见，最终全票通过了漏洞百出的行动计划并遭遇全军覆没惨败。心理学家欧文·贾尼斯据此提出了群体思维理论。导致该精英团队决策灾难的深层动力学机制是：", "选项": {"A": "群体高凝聚力促使成员为维持表面和谐而主动压制异见与质疑", "B": "决策团队成员普遍缺乏跨学科背景与地缘军事博弈的基本常识", "C": "敌对阵营故意释放虚假战术情报全面瘫痪了决策层的侦察系统", "D": "指挥层级过于繁琐冗长致使前方登陆部队错失了最佳突击战机"}, "答案": "A", "考察概念": "群体思维、自我审查、群体凝聚力与一致性幻觉", "答错说明": "未能识别群体思维的核心机制在于团队内部高凝聚力与从众压力诱发的自我审查与一致性幻觉，误将系统性决策盲区归因于成员专业素养不足、外部敌对欺骗或战术指挥层级冗长。"}, {"id": "U13-Q2", "题干": "1974年管理学者杰里·哈维在德克萨斯州度过40多度酷暑的下午，岳父提议驱车往返80多公里去阿比林吃难吃快餐，妻子、女婿与岳母因误以为他人赞成且不愿扫兴而全员附和同意；最终在酷暑颠簸与疲惫后，众人发现所有人原本都希望留在家里吹风扇。哈维据此提出“阿比林悖论”，该悖论揭示的集体决策失效根源是：", "选项": {"A": "群体内部不同成员之间存在根本无法妥协调和的口味与作息偏好", "B": "核心提议者凭借家庭长辈身份实施家长制专断并强行推行其主张", "C": "成员误判他人的真实偏好且为顺应虚构共识而违心表达附和支持", "D": "全体成员在出发前缺乏对实际行车路况与就餐环境的前置化调研"}, "答案": "C", "考察概念": "阿比林悖论、虚假共识、同意管理失效", "答错说明": "未能识别阿比林悖论的核心在于“无法管理同意”——每个成员均误判了群体他人的意愿，并为迎合虚构的共识而违背自身真实想法，误将其归因于利益不可调和、家长专制或行前调研不足。"}, {"id": "U13-Q3", "题干": "1951年所罗门·阿希设计经典线段判断实验，在多名协同伪装的托儿故意给出明显错误答案的压力下，超过75%的受试者至少出现了一次盲目顺从群体的错误判断。为防范自由讨论中因首发观点锚定与从众压力引发的群体盲区，名义小组技术采取的制度化应对流程是：", "选项": {"A": "由会议组织者指定权威专家率先开篇定调从而统一全员认知基准", "B": "鼓励所有参会人员在完全自由无约束的即兴研讨中直接碰撞想法", "C": "在方案提出之初立即组织全员进行少数服从多数的公开举手表决", "D": "要求成员先独立匿名书写观点并无偏展示而后再展开讨论与评价"}, "答案": "D", "考察概念": "从众效应、阿希实验、名义小组技术、防盲从群策流程", "答错说明": "未能理解名义小组技术的核心在于通过“先独立匿名静默书写、再汇总无偏呈现”的制度化程序阻断权威锚定与从众压力，误以为专家率先定调、自由即兴讨论或过早举手表决能解决从众偏误。"}]}, {"编号": "U14", "名称": "AI时代的协同决策", "通过线": "3题答对≥2题", "题目": [{"id": "U14-Q1", "题干": "1997年国际象棋世界冠军加里·卡斯帕罗夫败给IBM超级计算机深蓝后，于次年创立了允许人机结对参赛的半人马国际象棋。在随后的自由风格锦标赛中，由两名业余棋手操控三台普通电脑组成的半人马战队，出人意料地击败了纯顶级特级大师和单纯依赖超强算力的超级计算机。从人机协同与复杂决策的耦合机制分析，半人马战队克敌制胜的核心逻辑在于：", "选项": {"A": "以人类战略意图与大局观引导机器进行深度算力穷举与战术验算", "B": "完全依赖大师直觉经验定夺走法而机器仅用于常规棋谱信息检索", "C": "完全将推演决策委托给高算力引擎而人类仅充当形式化确认工具", "D": "引入多套异构算法系统通过无加权投票机制自动达成各走法折中"}, "答案": "A", "考察概念": "半人马模型、人机协同分工、机器算力与人类大局观", "答错说明": "未能理解半人马模型中人类大局观战略引导与机器深度计算穷举的互补共生本质，误将AI单纯降格为信息检索库、彻底交出自主判断沦为机械执行者，或以为多系统盲目投票折中能替代深层协同。"}, {"id": "U14-Q2", "题干": "1972年美国东方航空401号航班在迈阿密进近降落时，机组三名资深飞行员全神贯注于检查一个疑似烧坏的起落架指示灯泡，无人察觉自动驾驶仪已被意外触碰而断开高度保持；因过度信赖自动化巡航托管且未听到异常警报，全机最终在无预警状态下缓缓坠入沼泽。从行为决策与人机交互视阈审视，导致机组发生致命情境意识丧失的认知偏误机制是：", "选项": {"A": "将硬件偶发机械故障视作不可抗力并归因于事故发生的根本诱因", "B": "假定自动化托管绝对可靠而放弃对底层物理仪表的独立交叉核验", "C": "归咎于资深飞行人员技能退化并在排障高压下发生严重认知视盲", "D": "视系统警报过于频繁引发警报疲劳进而造成对异常信号主动忽略"}, "答案": "B", "考察概念": "自动化偏见、情境意识丧失、过度信赖与独立交叉核验", "答错说明": "未能识别自动化偏见源于对自动化系统的盲目信赖与沉默认可，从而放弃了对底层关键客观事实的独立交叉验证；误将其归咎于机械硬件的偶发故障、单向度的人员技能退化，或是高频假警报引发的警报疲劳。"}, {"id": "U14-Q3", "题干": "现代前沿人工智能实验室在研发与部署大模型时，普遍引入标准对抗性红队测试机制：红队不充当方案的终审裁判，而是专门模拟极端攻击视角、诱导性边界条件与对抗性提示词，对系统进行全方位漏洞扫描与压力测试。从人机协同推演与责任伦理视阈审视，红队测试流程在辅助复杂方案制定时的核心定位是：", "选项": {"A": "将算法视作中立裁决法官并由技术模型分担最终决策的法律责任", "B": "以多套模型输出的一致性共识作为人类免除决策失误的合规依据", "C": "由人类决策者与算法模型对复杂推演失误实行对半均摊责任机制", "D": "将算法视作压力测试的对抗参谋而最终价值裁决与责任归属人类"}, "答案": "D", "考察概念": "AI红队测试、决策责任归属、人机对抗推演与伦理边界", "答错说明": "未能理解AI红队测试是将算法作为专门暴露盲区与极端风险的对抗性参谋，误以为算法模型能够成为分担法律与伦理责任的裁决者、借多模型共识免除人类决策失误，或试图在人机之间均摊不可让渡的最终决策权责。"}]}, {"编号": "U15", "名称": "事前验尸与无责复盘系统", "通过线": "3题答对≥2题", "题目": [{"id": "U15-Q1", "题干": "1989年认知心理学家加里·克莱因提出事前验尸决策法：在重大项目正式启动前夕，召集全体参与者宣布假设方案在一年后遭遇了灾难性溃败，要求每人独立写下导致其死亡的具体原因。从行为决策与群体动力学机制审视，该方法打破团队过度乐观与群体迷思的核心逻辑在于：", "选项": {"A": "提前构建防御性心理预期以缓冲未来方案受挫时的团队士气打击", "B": "将方案彻底失败设为既成事实以赋予异见合法性并破除过度乐观", "C": "在行动前排查各环节责任归属以实现后续业务受挫时的精准追责", "D": "借助多方匿名投票表决机制以全盘推翻既定方案并遴选替代路径"}, "答案": "B", "考察概念": "事前验尸、群体迷思、过度乐观与异见合法化", "答错说明": "未能理解事前验尸的核心是通过将失败假定为既成事实，合法化异见表达并倒逼团队排查隐蔽漏洞，误将其视作心理防御缓冲、事前责任切分追责机制或推翻方案的投票表决手段。"}, {"id": "U15-Q2", "题干": "1975年心理学家巴鲁克·菲施霍夫开展关于1972年尼克松访华与访苏前景预测的经典实验：受试者在出访前对各种可能结局预估概率；事后获知真实结果的受试者在回忆初始估计时，系统性地大幅拔高了对已发生事件的预估数值。该实验所揭示的后见之明偏差，其深层认知机制在于：", "选项": {"A": "受试者为维护专业形象而刻意伪造记忆以契合已公开的客观事实", "B": "潜意识在前瞻研判中捕获了潜在决定性线索因而具备真实预见性", "C": "获知结果后无意识地重构认知线索从而高估了事前判断的确定性", "D": "长时间跨度导致的记忆自然衰减使受试者无法精确提取数值记录"}, "答案": "C", "考察概念": "后见之明偏差、认知重构、蠕变决定论与记忆扭曲", "答错说明": "未能识别后见之明偏差源于获知结果后无意识地自动化重构记忆与因果线索，误将其归因于有意维护面子的主观伪造、误信其具备真实的直觉预见性，或误当作无方向性的记忆自然遗忘衰减。"}, {"id": "U15-Q3", "题干": "1988年乔纳森·男爵与约翰·赫什开展关于医疗风险抉择的经典实验：向受试者呈现完全相同的病例数据与手术风险概率测算；当告知手术成功患者康复时，受试者高度赞誉决策严谨明智；而告知患者死于已知的小概率并发症时，受试者则严厉谴责决策轻率愚蠢。从决策质量评估与防范结果偏见的视角审视，评定决策优劣的客观基准在于：", "选项": {"A": "以最终交付成果是否达到预期指标作为裁量决策成败的唯一依据", "B": "依据事后出现的不利结局反推执行流程并推定必然存在人为过失", "C": "综合各利益相关方在尘埃落定后达成的情绪共识以判定方案优劣", "D": "基于做出决定时掌握的信息与风险权衡过程而非偶发的外生结果"}, "答案": "D", "考察概念": "结果偏见、过程与结果分离、决策质量评估与随机性", "答错说明": "未能认识到决策质量应严格取决于决策当时的信息完备度与权衡逻辑，误将不可控的随机结果作为评价标准的倒推依据，陷入以成败论英雄的结果偏见与后见归咎陷阱。"}]}]}]};
-const KEY = ["A","B","C","D"];
+const DATA = {"课程名称": "现代决策学：从认知觉醒到复杂权衡", "用途": "前置自测：判断学习者是否已掌握各单元核心决策工具与认知模型，支持『极速诊断（15题）』与『深度自测（45题）』双模式。", "设计原则": ["真实原型：题目严格基于提出该理论的经典科学史、经典实验或著名案例，杜绝自编情景带来的概念混淆。", "通俗去噪：彻底剔除经院式长难句与八股对仗，用清爽、生动、精准的自然语言陈述，阅读用时直降50%。", "低认知负荷：每题支持一键『我不了解此概念（跳过）』，不逼迫学员在盲区中苦读选项与瞎猜。", "哨兵题机制：每个单元精选1道穿透力最强的核心哨兵题，15题即可快速摸底并给出全景选课建议。", "客观闭环：干扰项均对准真实的直觉偏误与典型思维盲区，正确答案逻辑闭环且全局与哨兵题ABCD分布高度均衡。"], "评分规则": {"极速模式": "共15题（每单元1题核心哨兵题）。答对判定为『已掌握，建议跳过』；答错或跳过判定为『建议学习』，并支持针对薄弱单元展开2题深度加测。", "深度模式": "共45题（每单元3题）。每单元答对 ≥ 2 题判定为『已掌握，建议跳过』；否则判定为『建议学习』。", "整卷建议": "建议学习单元数 > 5 建议『完整学习本课程』；3~5 个建议『按需重点补课』；≤ 2 个建议『按薄弱单元定向查漏补缺』。"}, "模块": [{"模块编号": "Module 1", "模块名称": "信息免疫力：看清世界本来的样子", "单元": [{"编号": "U1", "名称": "事实、观点与证据链", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U1-Q1", "is_sentinel": true, "题干": "1610年伽利略用自制望远镜记录木星旁的四颗光斑，发现其相对位置夜复一夜规律变动，引发与经院哲学的激烈论战。下列陈述中，属于具备主体间性、可被独立验证的“客观事实”的是：", "选项": {"A": "望远镜视野中木星旁四颗光点的连续位置位移记录", "B": "认定所有天体运行本质上都必须符合完美的几何形状", "C": "主张经典经院哲学体系已穷尽了天体运行的终极规律", "D": "断定人造透镜必然会欺骗人类肉眼并诱发虚假幻象"}, "答案": "A", "考察概念": "事实与观点", "答错说明": "混淆了可观测、可记录的客观经验数据，与基于信念、教条或先验假设的主观观点。"}, {"id": "U1-Q2", "is_sentinel": false, "题干": "大众养生长期流传“每天必须喝足八杯水（约2升）”。后来学者溯源原始医学文件，证实该建议存在信源被断章截取的问题。得出这一结论的核心事实依据是：", "选项": {"A": "调查受试者在每天多喝水后疲劳缓解程度的问卷统计", "B": "查证原始文件中明确注明了“食物中已包含大部分水分”", "C": "对比各国最新膳食指南在每日推荐饮水量上的措辞差异", "D": "检测受试人群在增加额外饮水量后基础代谢指标的变化"}, "答案": "B", "考察概念": "证据等级、信源溯源", "答错说明": "未能查证一手原始文献的关键限定上下文，轻信了经二次转述断章取义的大众流行观点。"}, {"id": "U1-Q3", "is_sentinel": false, "题干": "1967年国际顶级医学期刊发表综述，将心血管疾病的罪魁祸首归咎于脂肪，刻意淡化糖的风险。后经档案解密，判定该文献存在“严重结构性利益冲突”的铁证是：", "选项": {"A": "该综述在发表后的数十年里被同行学者引用的频次规模", "B": "论文正文的数据图表展示形式存在严重的统计学绘图错误", "C": "糖业协会全额秘密资助了该课题且论文未做任何资金披露", "D": "论文的作者团队来自享有崇高学术声誉的顶级医学院所"}, "答案": "C", "考察概念": "利益冲突、专业边界与证据审计", "答错说明": "误把学术声誉或引用量当作客观中立的保证，忽视了商业资助方立场隐秘渗透带来的系统性偏倚。"}]}, {"编号": "U2", "名称": "样本盲区与算法茧房", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U2-Q1", "is_sentinel": false, "题干": "1936年美国大选前，《文学文摘》根据电话簿和豪车登记册寄出千万份问卷，回收230万份后预测兰登将大胜罗斯福，结果罗斯福以压倒性优势连任。导致该民调彻底失灵的根本原因是：", "选项": {"A": "抽样框排除了低收入选民，样本与真实总体存在严重偏差", "B": "问卷回收比例没有达到法定要求，统计误差范围不可控", "C": "问卷设问带有强烈引导倾向，诱导受访者做出了虚假回答", "D": "调查发起时间过早，未能捕捉到临近大选时出现的民意逆转"}, "答案": "A", "考察概念": "选择偏差、抽样框偏倚与代表性样本", "答错说明": "把抽样框本身的阶层选择性偏差，误归咎为样本量不足、设问引导或民意突变。"}, {"id": "U2-Q2", "is_sentinel": true, "题干": "二战期间盟军统计返航轰炸机的弹孔，发现机翼弹孔最密而发动机舱完好，军方提议加固机翼；统计学家沃德力排众议建议加固发动机舱。沃德推断所基于的统计学逻辑是：", "选项": {"A": "机翼受损面积远大于动力系统，属于次要的无效防御部位", "B": "评估受最初观察锚定，未建立未受攻击战机的基准对照组", "C": "统计样本只包含返航战机，发动机致命中弹的飞机早已坠毁", "D": "敌方防空火力在后续交战中会改变瞄准策略，现有数据失效"}, "答案": "C", "考察概念": "幸存者偏差、沉默证据与隐形分母", "答错说明": "只看到了返航的幸存者样本，遗漏了未返航战机这一“沉默证据”，陷入典型幸存者偏差。"}, {"id": "U2-Q3", "is_sentinel": false, "题干": "学者桑斯坦在《信息乌托邦》中指出，社交媒体的算法推送容易让公众陷入“信息茧房”和“回音室”。促成这一认知闭环形成的关键算法机制是：", "选项": {"A": "算法优先推荐商业变现率高的娱乐内容，挤压严肃议题", "B": "自然语言模型难以解析讽刺隐喻，导致分类准确率偏低", "C": "推荐引擎过度追逐即时短期热点，破坏了长周期深度思考", "D": "基于用户历史互动强化同质内容，协同过滤掉了相左声音"}, "答案": "D", "考察概念": "信息茧房、回音室效应与协同过滤算法机制", "答错说明": "未能识别推荐算法“基于偏好持续投喂、逐步过滤异质信息”的同质强化闭环机制。"}]}, {"编号": "U3", "名称": "相关、因果与归因错觉", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U3-Q1", "is_sentinel": false, "题干": "早期流行病学调查发现“喝咖啡多的人患心脏病比例显著更高”。后来深入研究发现，很多常喝咖啡的人往往伴随重度吸烟习惯，控制吸烟变量后该关联消失。导致早期推论失真的因果逻辑破绽是：", "选项": {"A": "忽视了同时影响咖啡摄入与心脏病发病的共存混杂变量（吸烟）", "B": "颠倒了因果关系方向，实际是心脏病早期不适促使患者多喝咖啡", "C": "误将时间上相继发生的两次独立随机事件当作确定性的必然因果", "D": "把生理指标监测中的正常随机起伏误判为长期病理性的器质改变"}, "答案": "A", "考察概念": "混杂变量、相关与因果", "答错说明": "未能识别出同时作用于原因和结果的第三变量（混杂变量），误将统计相关等同于因果关系。"}, {"id": "U3-Q2", "is_sentinel": true, "题干": "丹尼尔·卡尼曼在分析以色列空军飞行训练时发现：教官坚信“表扬使人退步、批评使人进步”，因为学员动作极佳受表扬后往往退步，动作极差被痛骂后往往好转。这一现象背后的统计学本质是：", "选项": {"A": "表扬让学员松懈大意，而严厉批评有效激发了学员的警惕心", "B": "极端表现包含随机偶然成分，后续表现会自然向均值靠拢", "C": "两次飞行测试间隔时间太短，无法反映学员技能的真实水平", "D": "高难度飞行动作消耗体能过大，导致状态呈现大幅周期起伏"}, "答案": "B", "考察概念": "均值回归、随机波动", "答错说明": "将统计学中普遍存在的“向均值回归”自然现象，错误归因于外界干预（表扬或批评）产生的因果效果。"}, {"id": "U3-Q3", "is_sentinel": false, "题干": "1747年英国军医詹姆斯·林德在军舰上做坏血病试验：挑选病情与生活环境相近的12名水手分为6组，分别给予不同补充剂，只有食用柑橘柠檬组迅速痊愈。该试验能够确立治疗因果关系的核心设计是：", "选项": {"A": "从古典医学理论出发推导出了酸性物质治疗坏血病的病理机制", "B": "详细记录了患病水手在服药之后身体症状由重变轻的时间顺序", "C": "仅依靠患病水手在接受救治前后身体状况的好转程度做自身对比", "D": "在基础环境一致的前提下，同步引入了接受不同干预的平行对照组"}, "答案": "D", "考察概念": "对照设计、因果推断", "答错说明": "未能理解确立因果推断必须依靠控制变量下的平行对照组设计，单凭自身前后对比极易被自愈假象欺骗。"}]}]}, {"模块编号": "Module 2", "模块名称": "心智与环境：驯服大脑的出厂设置", "单元": [{"编号": "U4", "名称": "直觉陷阱：搜集与评估时的盲区", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U4-Q1", "is_sentinel": false, "题干": "心理学家沃森在“2-4-6”规律猜想实验中发现：真实规则仅为“任意升序排列”。但受试者预设“偶数递增”猜想后，不断测试 4-6-8、10-12-14 去验证猜想，却极少提出可能被否定的反例数组（如 3-5-7）。这揭示的认知偏误是：", "选项": {"A": "依赖数字表面规律归纳，难以抽象出深层的数学通则", "B": "只倾向于搜集支持既有假说的正向证据，回避反例证伪", "C": "思维被初始呈现的数字牢牢锁定，后续认知调整不充分", "D": "依据大脑中最容易联想到的具体案例来高估事件的概率"}, "答案": "B", "考察概念": "确认偏误、假说检验与证伪原则", "答错说明": "未能识别出人们只愿意寻找证实性证据、系统性回避证伪的“确认偏误”倾向。"}, {"id": "U4-Q2", "is_sentinel": false, "题干": "特沃斯基与卡尼曼让受试者先转动一个被预设在10或65停下的幸运轮盘，随后请他们估算联合国中非洲国家的比例。轮盘停在10的受试组估值中位数为25%，停在65的组估值中位数则高达45%。该实验揭示的核心机制是：", "选项": {"A": "极端鲜明的数字占据短期记忆，主导了后续信息的提取概率", "B": "受试者误以为实验线索具备权威关联性，放弃了独立估算推论", "C": "初始给出的无关数值充当了思维起步锚点，后续认知调整不足", "D": "问题的描述语境重设了得失参照点，系统逆转了人们的风险偏好"}, "答案": "C", "考察概念": "锚定效应、调整不足", "答错说明": "未能理解即便完全无关的初始数值也会充当认知锚点，且随后的思考往往调整严重不足。"}, {"id": "U4-Q3", "is_sentinel": true, "题干": "著名的“亚洲疾病问题”中，面对完全相同的生存概率：当方案表述为“确定救活200人（共600人）”时，多数人选择确定方案；而表述为“确定死亡400人”时，多数人转而选择冒险方案。导致这种偏好逆转的认知根源是：", "选项": {"A": "人们对小概率极端事件主观赋予了过高的权重", "B": "题干给出的具体伤亡数字充当锚点限制了思维发散", "C": "决策者只关注符合直觉的叙述，忽视客观概率权衡", "D": "语言框架重设心理参照点，人在收益域保守、损失域冒险"}, "答案": "D", "考察概念": "框架效应、心理参照点与前景理论", "答错说明": "未能识别语言表述重设了心理得失参照点：收益框架诱发避险偏好，损失框架诱发冒险偏好。"}]}, {"编号": "U5", "名称": "止损的艺术：跨越沉没成本与损失厌恶", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U5-Q1", "is_sentinel": true, "题干": "20世纪60至70年代，英法两国研发协和客机。在研发严重超支且已证明商业运营无法盈利后，两国决策层仍以“已投入巨资不可半途而废”为由持续追加预算十数年。导致该项目陷入“协和谬误”的核心认知机制是：", "选项": {"A": "把既往无法收回的支出当作决策依据，背离了面向未来的边际评估", "B": "低估了新型航空技术的研发周期，未能及时预判外部能源危机冲击", "C": "受制于跨国联合研发的体制复杂性，缺乏果断叫停项目的制衡机制", "D": "过度追求国家旗舰工程的声誉形象，完全脱离了民用航线运营规律"}, "答案": "A", "考察概念": "沉没成本谬误与边际决策分析", "答错说明": "决策被过去已发生且无法挽回的投入绑架，将沉没成本当作继续投资的借口，违背了边际决策原则。"}, {"id": "U5-Q2", "is_sentinel": false, "题干": "卡尼曼设计的抛硬币博弈中：硬币正面朝上赢100美元、背面朝上输100美元，绝大多数人坚决拒绝参与；只有当获胜收益提高至200美元以上时，多数人才愿意接受博弈。该实验揭示的核心心理规律是：", "选项": {"A": "人们在面对确定性收益时，更倾向于采取极度保守的策略", "B": "同等金额损失带来的痛苦负效用，显著高于等额收益的正效用", "C": "人们对已经拥有的物品产生情感依恋，盲目抬高持有物的估值", "D": "决策者更容易受强烈即时情绪驱动，高估小概率危险事件发生率"}, "答案": "B", "考察概念": "损失厌恶与前景理论价值函数", "答错说明": "未能理解损失厌恶的核心特征：人对损失的敏感程度显著高于收益（痛苦效用约为同等收益的2倍左右）。"}, {"id": "U5-Q3", "is_sentinel": false, "题干": "理查德·塞勒在康奈尔大学分发马克杯：随机分到杯子的学生作为卖方，平均索价5.25美元才肯卖；未分到杯子的买方学生平均只愿出2.25美元买。导致买卖双方估值产生显著鸿沟的心理机制是：", "选项": {"A": "买方受到外部市价参考的锚定，压低了对非生活必需品的估价", "B": "卖方试图补偿获取杯子的精力，将沉没成本转嫁给买方买单", "C": "拥有某物品的状态触发了损失厌恶，显著拔高了对所持物品的估值", "D": "交易双方存在强烈的现状偏见，习惯性本能抗拒打破初始平衡状态"}, "答案": "C", "考察概念": "禀赋效应与拥有权心理机制", "答错说明": "未能理解禀赋效应的实质：拥有权使得放弃该物品被视作一种“损失”，因而要求更高的补偿溢价。"}]}, {"编号": "U6", "名称": "冷热状态与选择架构（Nudge）", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U6-Q1", "is_sentinel": false, "题干": "心理学家勒温斯坦指出，人在平静饱腹（冷状态）时制定的节食规划，一旦面对深夜美食香气（热状态）极易全面瓦解。这种在理性状态下严重低估本能冲动强度的认知偏差被称为：", "选项": {"A": "现时偏好：由于缺乏长远规划能力，盲目追求眼前的即时满足", "B": "冷热共情差距：处于冷静状态时无法准确预判自己在冲动状态下的渴望", "C": "规划谬误：在制定个人计划时总是表现出过度乐观的执行盲信", "D": "意志力错觉：自控力是一种无限资源，只要信念坚定就能克服一切欲望"}, "答案": "B", "考察概念": "冷热共情差距、决策冲动与意志力错觉", "答错说明": "未能识别冷热共情差距：人在冷态下对热态时的欲望强度缺乏真实感知，误以为靠意志力就能硬抗冲动。"}, {"id": "U6-Q2", "is_sentinel": false, "题干": "20世纪60年代英国将含一氧化碳的煤气替换为无毒天然气，本为工业升级，却让全英自杀率永久下降了近三分之一，且其他自杀方式并未增加。该案例对个人自律与冲动管理的核心启示是：", "选项": {"A": "克服冲动最根本的途径是强化内心的自控力与心理弹性", "B": "必须消除环境中所有的诱惑源头，才能从根本上阻断冲动发生", "C": "冲动往往具有极短的时效性，在关键节点增加物理摩擦力能有效阻断冲动", "D": "替代性行为很容易在短期内迅速形成，需要持续的外部强制监督"}, "答案": "C", "考察概念": "摩擦力设计、情境预防与冲动阻断", "答错说明": "忽视了冲动的瞬时性与物理摩擦力（环境阻力）的决定性阻断作用，误以为自律只能靠意志力硬抗。"}, {"id": "U6-Q3", "is_sentinel": true, "题干": "文化与经济极其相近的欧洲邻国中，德国器官捐献登记率仅12%，而奥地利高达99%。差异根源仅在于德国默认不同意（需主动登记同意），奥地利默认同意（需主动登记退出）。该现象说明：", "选项": {"A": "严苛的法律惩戒威慑是改变公众大规模社会行为的最有效杠杆", "B": "大规模宣传教育能彻底扭转公众在重大伦理议题上的思想认知", "C": "绝大多数人在面对复杂公共议题时完全缺乏自主的价值判断力", "D": "选择架构中的默认选项具有巨大引导力，无需强制即可重塑决策"}, "答案": "D", "考察概念": "助推、默认选项与选择架构", "答错说明": "未能理解“助推（Nudge）”中默认选项的巨大影响力，把行为差异误归为宣传、法律或民众素质。"}]}]}, {"模块编号": "Module 3", "模块名称": "概率与不对称风险：在迷雾中下注", "单元": [{"编号": "U7", "名称": "基准率与贝叶斯更新", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U7-Q1", "is_sentinel": false, "题干": "某城市85%的出租车是绿色，15%是蓝色。夜间发生肇事逃逸，目击者指认是蓝色。测试表明该目击者夜间辨色准确率为80%。直觉常误以为肇事车是蓝色的概率高达80%，实际计算仅约41%。直觉判断产生巨大偏差的根本原因是：", "选项": {"A": "直觉完全忽略了城市中绿色出租车占85%这一强大的先验基准率", "B": "目击者的口供在司法实践中天然带有主观偏见和利益诱导倾向", "C": "样本量太小，无法通过单次目击事件建立起统计学意义的置信度", "D": "混淆了条件概率中的先后次序，把结果条件与原因条件颠倒了"}, "答案": "A", "考察概念": "基准率忽略、先验概率", "答错说明": "直觉只盯着个案证据的准确度（80%），完全忽视了总体中压倒性的先验基准率（85% vs 15%）。"}, {"id": "U7-Q2", "is_sentinel": true, "题干": "某种罕见疾病在人群中的患病率为0.1%（千分之一）。某项体检检测的准确率为99%，但有1%的假阳性率（健康人有1%概率误报为阳性）。若一人初检结果为阳性，他真正患病的概率最接近：", "选项": {"A": "约 99%", "B": "约 50%", "C": "约 9%", "D": "约 1%"}, "答案": "C", "考察概念": "贝叶斯更新、假阳性与条件概率", "答错说明": "1000人里只有1个真正患者，但999个健康人中有约10人被假阳性误报；在11个阳性中真正患病的只有1人（1/11 ≈ 9%）。"}, {"id": "U7-Q3", "is_sentinel": false, "题干": "吉仁泽发现，资深医生面对“患病率0.1%、灵敏度99%、假阳性率1%”时多数算错概率；但换成“1000人中1人患病呈阳性，999人中有10人健康但误报阳性”时，绝大多数医生能秒答正确。这说明克服概率认知盲区的最高效方式是：", "选项": {"A": "强行背诵贝叶斯数学定理公式，并在日常思考中严格套用", "B": "延长逻辑推理步骤与推导时间，完全摒除任何直觉形式辅助", "C": "把所有的单点概率数值转化为带有极差区间的复杂统计表格", "D": "将抽象复杂的条件概率，转化为符合人类演化直觉的“自然频数”"}, "答案": "D", "考察概念": "自然频数、信息表征架构与贝叶斯直觉", "答错说明": "未能认识到将条件概率表征为“自然频数（每千人中几人）”能完美绕过人脑概率计算缺陷。"}]}, {"编号": "U8", "名称": "期望值、赔率与尾部风险", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U8-Q1", "is_sentinel": true, "题干": "塔勒布提出：在六发装转轮手枪里装一颗子弹玩轮盘赌，扣动一次若生还可获1000万美元。虽然数学期望极高（5/6 × 1000万 = 833万美元），但理性的决策者绝不参与。其底层决策原则是：", "选项": {"A": "面临不可承受的致命破产风险时，数学期望再高也必须无条件拒绝", "B": "奖金带来的边际心理满足递减，无法对冲开枪瞬间的恐惧负情绪", "C": "单次随机试验不满足大数定律，无法确保统计期望在当场能够兑现", "D": "机械武器物理结构存在磨损风险，导致真实存活概率低于理论测算"}, "答案": "A", "考察概念": "尾部风险、破产风险与生存底线", "答错说明": "未能理解破产风险（Ruin Problem）的毁灭性：一旦触发全盘出局，期望值失去任何计算意义。"}, {"id": "U8-Q2", "is_sentinel": false, "题干": "一个硬币博弈：每次正面收益+50%，背面损失-40%。100个人各自投掷一次，平均收益为正（+5%）；但如果让一个人连续投掷100次，最终资产几乎必然归零。这种“群体平均”与“个体时间累积”的割裂被称为：", "选项": {"A": "幸存者偏差：大众只看到了赢家巨额收益，忽视了中途退出者", "B": "遍历性破缺：系统的时间平均与空间平均不相等，存在路径依赖", "C": "赌徒谬误：误以为连续出现负面结果后正面结果的概率会补偿性上升", "D": "均值回归：长期连续博弈使极端波动的资产最终向全市场中位数靠拢"}, "答案": "B", "考察概念": "遍历性破缺、时间平均与空间平均、复利路径依赖", "答错说明": "未能识别出非遍历性系统的特征：不能用群体的横截面平均（空间平均）直接推导单个主体的长期复利过程（时间平均）。"}, {"id": "U8-Q3", "is_sentinel": false, "题干": "1998年由诺奖经济学大师掌舵的长期资本管理公司（LTCM）濒临破产。其精密数学模型在绝大多数历史数据中表现完美，但在俄罗斯债务违约冲击下短短数周巨亏40亿美元。该案例对风险决策的惨痛教训是：", "选项": {"A": "数学量化模型在本质上完全无法预测任何现实金融市场的走势", "B": "决策团队内部缺乏跨学科多样性，导致在关键时刻发生盲目从众", "C": "过高杠杆彻底抹杀了安全边际，使系统在罕见极端尾部事件下崩溃", "D": "过度分散的投资策略稀释了核心资产在常规市场环境下的盈利能力"}, "答案": "C", "考察概念": "杠杆尾部风险与安全边际", "答错说明": "高杠杆彻底摧毁了容错空间（安全边际），面对超出正态分布预测的罕见“黑天鹅”时没有任何生存缓冲。"}]}, {"编号": "U9", "名称": "校准训练：克服过度自信", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U9-Q1", "is_sentinel": false, "题干": "悉尼歌剧院最初预计1963年完工、耗资700万澳元；但最终1973年才竣工，实际耗资高达1.02亿澳元（超期10年、超支14倍）。导致这种复杂项目普遍严重超期超支的认知谬误是：", "选项": {"A": "规划谬误：深陷内部视角，只聚焦理想步骤而忽视不可预见的阻碍", "B": "锚定效应：前期草率给出的预算数字锁定了后续资源的合理调配", "C": "结果偏见：在项目初期盲目以最终的艺术声誉作为唯一考核指标", "D": "承诺升级：因前期投入过大而无法叫停，被迫继续维持超支项目"}, "答案": "A", "考察概念": "规划谬误、过度自信与内部视角", "答错说明": "深陷“规划谬误”：人在做计划时本能采用内部视角，只设想一切顺利的最佳路径，严重低估意外阻碍。"}, {"id": "U9-Q2", "is_sentinel": true, "题干": "在认知校准测试中，要求受试者给出“有90%把握包含真实数值”的区间（如马丁·路德·金遇刺年份）。大量测试发现，受试者给出的区间实际命中率通常仅有40%~60%。这表明人们普遍存在：", "选项": {"A": "易得性偏差：更容易根据最近听到的历史常识给出答案", "B": "过度精确：对自己知识的准确度过度自信，把置信区间划得过窄", "C": "确认偏误：在检索大脑记忆时倾向于寻找支持自己猜测的线索", "D": "现时偏好：由于缺乏长期复盘意识，不愿花精力深入思考"}, "答案": "B", "考察概念": "过度自信、过度精确与置信区间校准", "答错说明": "未能识别出“过度精确（Overprecision）”偏误：误以为自己的知识很精确，因而给出了过窄的置信区间。"}, {"id": "U9-Q3", "is_sentinel": false, "题干": "丹尼尔·卡尼曼在主导编写高中教材时，团队基于内部视角乐观估算“最多两年半搞定”；但请教资深课程专家后得知，同类教材编写团队平均耗时7年，且有40%彻底放弃。克服规划中盲目乐观的最佳工具是：", "选项": {"A": "增加项目人员的加班时长与激励措施，确保进度不被拖垮", "B": "拆细任务颗粒度，用更精密的甘特图细化每个工作日安排", "C": "引入外部投资机构对项目资金实施严格的事前事中闭环审计", "D": "采用“外部视角”，参考同类项目的真实成功率与历史基准数据"}, "答案": "D", "考察概念": "外部视角、基准比率与参考类别预测", "答错说明": "未能采用“外部视角（参考类别预测）”，只在团队内部反复优化计划细节，无法抵御系统性乐观偏差。"}]}]}, {"模块编号": "Module 4", "模块名称": "权衡、试验与敏捷行动：破解两难困境", "单元": [{"编号": "U10", "名称": "机会成本与多目标价值权衡", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U10-Q1", "is_sentinel": false, "题干": "法国经济学家巴斯夏提出著名的“破窗谬误”：顽童打破店主玻璃，旁人认为这能促进玻璃工匠生意进而拉动整体经济。这一谬论在决策分析上的根本破绽在于忽视了：", "选项": {"A": "看不见的机会成本：店主若不修窗，这笔钱本可用于买鞋或生产投资", "B": "破窗对杂货铺日常经营流水造成的直接营业中断损失与顾客流失", "C": "制造替代玻璃所需的原材料供应与物流周转过程中的隐性耗费", "D": "社区治安恶化对周边商业环境与整体顾客消费心理造成的负面影响"}, "答案": "A", "考察概念": "机会成本与“看得见的与看不见的”", "答错说明": "只看到了破窗后产生的显性消费支出（看得见的），彻底忽视了这笔资源本可创造更大价值的机会成本（看不见的）。"}, {"id": "U10-Q2", "is_sentinel": false, "题干": "在产品研发中团队常希望“工期极短、功能极多、系统极稳”。但在工程实践中这三者构成不可能三角。在帕累托前沿上进行理性权衡的关键原则是：", "选项": {"A": "必须通过技术创新同时达到三个维度的极致，否则方案不合格", "B": "明确核心底线与核心目标，接受在非关键维度上的必要妥协与舍弃", "C": "采用平均分配权重的打分法，确保每个目标都被同等程度满足", "D": "优先追求短期的交付速度，后续再通过加班弥补质量与稳定性漏洞"}, "答案": "B", "考察概念": "多目标决策、帕累托前沿与不可能三角", "答错说明": "在资源受限的真实世界中不存在既要又要的免费午餐，理性的多目标决策必须确立底线约束与舍弃权衡。"}, {"id": "U10-Q3", "is_sentinel": true, "题干": "诺贝尔奖得主赫伯特·西蒙指出：“信息的丰富导致了注意力的匮乏”。企业核心高管若沉溺于批阅海量低价值邮件和格式审批，所付出的最大隐性代价是：", "选项": {"A": "增加了协同软件工具的采购支出与长期的日常维护费用", "B": "导致企业内部邮件服务器过载并增加了潜在的数据泄露风险", "C": "严重消耗了最稀缺的高价值深度思考与重大战略决断注意力", "D": "打乱了各职能部门之间的正常汇报关系与日常层级管理秩序"}, "答案": "C", "考察概念": "注意力稀缺、隐形成本与机会成本", "答错说明": "注意力是最不可再生的稀缺资源，消耗在低价值事务上造成的最大损失是被挤占的高阶决策机会成本。"}]}, {"编号": "U11", "名称": "可逆性、信息价值与小步试验", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U11-Q1", "is_sentinel": false, "题干": "亚马逊创始人贝佐斯将决策分为两类：不可逆的“单向门”（如重资产重构）与易撤销的“双向门”（如页面按钮样式）。根据该模型，防范决策瘫痪的最佳策略是：", "选项": {"A": "对双向门决策快速授权试错，将深思熟虑留给不可逆的单向门", "B": "对所有决策实行同样的层层审批，把执行过程中的差错率降到零", "C": "面对不可逆的重大决策时，无休止搜集信息直至所有不确定性消除", "D": "全面放权所有决策类型，以绝对速度优先推进公司业务"}, "答案": "A", "考察概念": "单向门与双向门、决策可逆性与分析瘫痪", "答错说明": "未能区分决策的可逆性等级，用单向门的高标准去审批双向门导致分析瘫痪，或把单向门草率当双向门冒险。"}, {"id": "U11-Q2", "is_sentinel": true, "题干": "1999年鞋类电商Zappos创始人为了测试“人们是否愿意在网上买鞋”，没有自建仓库，而是去实体店拍鞋照挂上网，有人下单就原价买下寄出。这一做法的核心价值是：", "选项": {"A": "通过轻资产模式提前积累客户评价，提高品牌公信力", "B": "用极小沉没成本验证真实支付意愿，排除伪需求根本风险", "C": "靠在实体店原价采买赚取微薄进销差价，实现业务自负盈亏", "D": "规避规模化扩张带来的管理难度，保持小团队的灵活运转"}, "答案": "B", "考察概念": "最小可行性试验（MVP）与信息价值", "答错说明": "未能理解MVP的本质是用最低成本获取验证关键假设（用户是否愿意真金白银买单）的高价值信息。"}, {"id": "U11-Q3", "is_sentinel": false, "题干": "攀登珠峰有一条著名的“下午两点原则”：无论离顶峰还剩多远、天气看起来多么良好，下午两点必须强制下撤，否则黑夜与暴风雪将带来灭顶之灾。这一铁律的决策价值在于：", "选项": {"A": "依据现场实际体能动态评估，灵活捕捉稍纵即逝的冲顶良机", "B": "根据前期付出的巨额登山费用，适度顺延下撤时限以争取成功", "C": "通过团队现场民主投票，消除内部下撤分歧以统一行动意愿", "D": "用事前冷状态下设立的刚性停止规则，阻断现场冲动引发的承诺升级"}, "答案": "D", "考察概念": "预设停止规则、冷热状态脱节与承诺升级", "答错说明": "未能理解预设停止规则（Stop Rule）的价值：在理智冷状态预设底线，防范热状态下被沉没成本和虚荣心绑架。"}]}]}, {"模块编号": "Module 5", "模块名称": "博弈、群策与人机协同：在复杂系统中进化", "单元": [{"编号": "U12", "名称": "策略互动与博弈思维", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U12-Q1", "is_sentinel": false, "题干": "在阿克塞尔罗德组织的重复囚徒困境计算机锦标赛中，最简单的“以牙还牙（Tit for Tat）”策略击败了所有复杂程序夺冠。该策略能在长期重复博弈中胜出的核心法则是：", "选项": {"A": "率先发起背叛，通过先发制人确立绝对的竞争优势", "B": "首轮主动合作，对手背叛则立即报复，对手重归合作则迅速宽容", "C": "随机做出合作或背叛的决定，隐藏自己的策略模式防止被针对", "D": "无论对手采取何种恶劣行径，始终坚持无条件合作以感化对方"}, "答案": "B", "考察概念": "重复博弈、囚徒困境与以牙还牙策略", "答错说明": "“以牙还牙”的精髓是“友善开局、坚决惩罚、快速宽容、策略透明”，过度心机或盲目妥协都无法胜出。"}, {"id": "U12-Q2", "is_sentinel": false, "题干": "18世纪末英国向澳大利亚运送犯人。早期按“上船人数”预付运费，船主克扣口粮导致死亡率超30%；后来政府改为“按下船存活人数”付费，死亡率立刻骤降至1%以下。该机制设计成功的根本在于：", "选项": {"A": "强化了对私人船长的职业道德宣传与严厉的司法威慑", "B": "派驻官方医疗人员对漫长航程实施全天候封闭监督", "C": "改变付费规则，将船长的自利动机与犯人的生存目标紧密绑定（激励相容）", "D": "提高了船主承揽航运的抵押金比例，强化事后追偿力度"}, "答案": "C", "考察概念": "激励相容、机制设计与信息不对称", "答错说明": "未能理解机制设计的精髓：不要试图改造人性，而是设计规则让自利行为自然导向公共目标（激励相容）。"}, {"id": "U12-Q3", "is_sentinel": true, "题干": "“一人切蛋糕、另一人先挑”是解决双人分配争端的经典机制。即使两人互不信任且都极度自私，该规则也能实现公平分配，其背后的博弈逻辑是：", "选项": {"A": "双方在公序良俗的道德约束下，自觉克制了自私贪婪的冲动", "B": "切蛋糕的人具备高超的刀工，能在物理形态上做到分毫不差", "C": "先挑蛋糕的人具有利他主义心理，会主动照顾切蛋糕者的利益", "D": "切分者预判对方必选较大一份，在自利驱使下会尽量切得分毫不差"}, "答案": "D", "考察概念": "无嫉妒分割、逆向归纳与机制设计", "答错说明": "切分者基于“对方必挑大块”的逆向归纳预判，在自利驱使下不得不做到均等，实现无嫉妒分割。"}]}, {"编号": "U13", "名称": "群体盲区与高效群策机制", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U13-Q1", "is_sentinel": true, "题干": "1961年美国肯尼迪政府策划入侵古巴的“猪湾事件”，内阁决策团队汇集了顶尖智囊与国家安全精英，但在凝聚力极高的氛围下却一致通过了漏洞百出的计划并惨败。这种“群体思维”的核心机制是：", "选项": {"A": "群体高凝聚力促使成员为维持表面和谐而主动压制异见与质疑", "B": "决策团队成员普遍缺乏跨学科背景与地缘军事博弈的基本常识", "C": "敌对阵营故意释放虚假战术情报全面瘫痪了决策层的侦察系统", "D": "指挥层级过于繁琐冗长致使前方登陆部队错失了最佳突击战机"}, "答案": "A", "考察概念": "群体思维、一致性幻觉与自我审查", "答错说明": "群体思维的核心是成员为了维护团队和谐与一致性，不自觉地压制怀疑、实行自我审查。"}, {"id": "U13-Q2", "is_sentinel": false, "题干": "酷暑下岳父提议驱车往返80公里去阿比林吃难吃的晚餐，全家人虽内心不愿，但都误以为别人想去而纷纷附和。返家后大家才发现其实没一个人想去。这种“所有人都赞成了一项没人喜欢的提议”的现象被称为：", "选项": {"A": "群体内部不同成员之间存在根本无法妥协调和的口味偏好", "B": "核心提议者凭借家庭长辈身份实施家长制专断并强行推行其主张", "C": "成员误判他人的真实偏好，为顺应虚构共识而违心附和（阿比林悖论）", "D": "全体成员在出发前缺乏对实际行车路况与就餐环境的事前调研"}, "答案": "C", "考察概念": "阿比林悖论、虚假共识与同意管理失效", "答错说明": "阿比林悖论的本质是“未能有效管理同意”：每个人都在猜度并迎合一个实际上不存在的“群体共识”。"}, {"id": "U13-Q3", "is_sentinel": false, "题干": "所罗门·阿希实验表明，在多名托儿故意给出明显错误答案的压力下，超过75%的受试者至少出现了一次盲目顺从。为了在企业决策研讨中阻断“从众压力”与“权威定调”，名义小组技术（NGT）的制度化流程是：", "选项": {"A": "由会议组织者指定权威专家率先开篇定调从而统一全员认知基准", "B": "鼓励所有参会人员在完全自由无约束的即兴研讨中直接碰撞想法", "C": "在方案提出之初立即组织全员进行少数服从多数的公开举手表决", "D": "要求成员先独立匿名书写观点并无偏展示，而后再展开讨论与评价"}, "答案": "D", "考察概念": "从众效应、阿希实验与名义小组技术", "答错说明": "名义小组技术通过“先独立静默书写、再汇总无偏呈现”的制度化程序，阻断权威锚定与从众压力。"}]}, {"编号": "U14", "名称": "AI时代的协同决策", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U14-Q1", "is_sentinel": false, "题干": "在人机自由风格国际象棋赛中，由两名业余棋手操控三台普通电脑组成的“半人马战队”，出人意料地击败了纯顶级特级大师和纯超级计算机。半人马战队获胜的核心协同逻辑在于：", "选项": {"A": "以人类战略意图与大局观引导机器，机器负责深度战术穷举与验算", "B": "完全依赖大师直觉经验定夺走法，而机器仅用于常规棋谱信息检索", "C": "完全将推演决策委托给高算力引擎，而人类仅充当形式化确认工具", "D": "引入多套异构算法系统通过无加权投票机制自动达成各走法折中"}, "答案": "A", "考察概念": "半人马模型、人机协同分工、机器算力与人类大局观", "答错说明": "半人马优势源于人机互补共生：人类提供战略意图与全局评估，机器负责高速准确的微观战术穷举。"}, {"id": "U14-Q2", "is_sentinel": true, "题干": "东方航空401号航班在进近降落时，机组三名资深飞行员全神贯注于排查一个烧坏的起落架指示灯泡，无人察觉自动驾驶已被意外触碰而断开，全机最终在安静中撞地坠毁。导致机组情境意识丧失的认知偏误机制是：", "选项": {"A": "将硬件偶发机械故障视作不可抗力并归因于事故发生的根本诱因", "B": "假定自动化托管绝对可靠而放弃对底层物理仪表的独立交叉核验", "C": "归咎于资深飞行人员技能退化并在排障高压下发生严重认知视盲", "D": "系统警报过于频繁引发警报疲劳进而造成对异常信号主动忽略"}, "答案": "B", "考察概念": "自动化偏见、情境意识丧失与交叉核验", "答错说明": "未能识别“自动化偏见（Automation Bias）”：过度信赖系统自动化状态，放弃了对关键事实的交叉验证。"}, {"id": "U14-Q3", "is_sentinel": false, "题干": "现代前沿实验室在部署复杂决策AI模型时，普遍引入对抗性红队测试：红队专门模拟对抗攻击与极端漏洞。从责任伦理视阈审视，AI红队机制在决策系统中的核心定位是：", "选项": {"A": "将算法视作中立裁决法官，由技术模型分担最终决策的法律责任", "B": "以多套模型输出的一致性共识作为人类免除决策失误的合规依据", "C": "由人类决策者与算法模型对复杂推演失误实行对半均摊责任机制", "D": "将算法视作极限压力测试的对抗参谋，而最终价值裁决与责任始终在人"}, "答案": "D", "考察概念": "AI红队测试、决策责任归属与人机伦理边界", "答错说明": "算法模型只能充当辅助推演和压力测试的参谋，最终价值判断与决策法律责任绝不能让渡给机器。"}]}, {"编号": "U15", "名称": "事前验尸与无责复盘系统", "通过线": "答对 ≥ 2 题（极速模式答对哨兵题）", "题目": [{"id": "U15-Q1", "is_sentinel": false, "题干": "加里·克莱因提出“事前验尸法”：在重大项目正式启动前，召集全员假设“方案在一年后遭遇了灾难性惨败”，要求每人独立写下导致其死亡的具体原因。该方法打破团队盲目乐观的核心逻辑在于：", "选项": {"A": "提前构建防御性心理预期以缓冲未来方案受挫时的团队士气打击", "B": "将彻底失败设为既成事实，赋予异见合法性并破除盲目乐观", "C": "在行动前排查各环节责任归属以实现后续业务受挫时的精准追责", "D": "借助多方匿名投票表决机制以全盘推翻既定方案并遴选替代路径"}, "答案": "B", "考察概念": "事前验尸、群体迷思与异见合法化", "答错说明": "事前验尸的绝妙之处在于通过假定“已经失败”，打破了说吉祥话的社会压力，使提出隐患和异见完全合法化。"}, {"id": "U15-Q2", "is_sentinel": true, "题干": "菲施霍夫在尼克松访华前让受试者预估各种结局的概率；事后真实结果公布，再让受试者回忆当初的预估，受试者无意识地大幅拔高了对已发生事件的初始预估值。这种“事后诸葛亮”的深层认知机制在于：", "选项": {"A": "受试者为维护专业形象而刻意伪造记忆以契合已公开的客观事实", "B": "潜意识在前瞻研判中捕获了潜在决定性线索因而具备真实预见性", "C": "获知结果后大脑无意识地重构因果记忆，高估了事前判断的确定性", "D": "长时间跨度导致的记忆自然衰减使受试者无法精确提取数值记录"}, "答案": "C", "考察概念": "后见之明偏差、认知重构与蠕变决定论", "答错说明": "后见之明偏差（Hindsight Bias）源于大脑在获知结局后自动重构记忆因果链，误以为自己“早就料到了”。"}, {"id": "U15-Q3", "is_sentinel": false, "题干": "医生根据详尽检查和风险收益比决定施行手术。手术成功患者康复时，人们赞扬决策明智；而患者若死于已知的罕见并发症，人们便痛斥决策轻率愚蠢。这种“结果偏见”违背了现代决策学的哪项核心原则？", "选项": {"A": "以最终交付成果是否达到预期指标作为裁量决策成败的唯一依据", "B": "依据事后出现的不利结局反推执行流程并推定必然存在人为过失", "C": "综合各利益相关方在尘埃落定后达成的情绪共识以判定方案优劣", "D": "基于做出决定时掌握的信息与风险权衡过程而非偶发的外生结果"}, "答案": "D", "考察概念": "结果偏见、过程与结果分离、决策质量评估", "答错说明": "决策质量严格取决于做决定时的信息质量与权衡逻辑（过程），绝不能受不可控的随机结局倒推绑架。"}]}]}]};
+let currentMode = "quick"; // 'quick' | 'deep'
+let activeModIndex = 0;
+const userAnswers = {}; // { qid: { choice: 'A'|'B'|'C'|'D'|'skip', isSkip: bool } }
 
-document.getElementById("intro").innerHTML =
-  "<b>课程：</b>" + DATA["课程名称"] + "　|　<b>共 " + DATA.模块.length + " 个模块、" +
-  DATA.模块.reduce((n,m)=>n+m.单元.length,0) + " 个单元</b><br>" +
-  DATA.评分规则.单元判定;
+const quizContainer = document.getElementById("quiz-container");
+const modTabsContainer = document.getElementById("mod-tabs");
+const progBar = document.getElementById("prog-bar");
+const progNum = document.getElementById("prog-num");
+const modeDescText = document.getElementById("mode-desc-text");
 
-const quiz = document.getElementById("quiz");
-DATA.模块.forEach(mod=>{
-  const h = document.createElement("div");
-  h.className = "mod"; h.textContent = mod.模块编号 + "　" + mod.模块名称;
-  quiz.appendChild(h);
-  mod.单元.forEach(u=>{
-    const box = document.createElement("div");
-    box.className = "unit";
-    box.dataset.unit = u.编号;
-    box.innerHTML =
-      '<div class="unit-h"><div class="unit-t"><small>'+u.编号+'</small>'+u.名称+'</div>'+
-      '<span class="badge" data-badge>未作答</span></div>'+
-      '<div class="goal">通过线：'+u.通过线+'　·　考察目标：'+(u.题目.map(q=>q.考察概念).filter((v,i,a)=>a.indexOf(v)===i).join("、"))+'</div>';
-    u.题目.forEach((q,qi)=>{
-      const qd = document.createElement("div");
-      qd.className = "q";
-      qd.dataset.qid = q.id;
-      qd.dataset.answer = q.答案;
-      let opts = '<div class="opts">';
-      KEY.forEach(k=>{
-        if(!(k in q.选项)) return;
-        opts += '<label class="opt" data-k="'+k+'"><input type="radio" name="'+q.id+'" value="'+k+'">'+
-                '<span class="k">'+k+'.</span><span>'+q.选项[k]+'</span></label>';
-      });
-      opts += '</div>';
-      qd.innerHTML = '<div class="q-t"><i>Q'+(qi+1)+'</i>'+q.题干+'</div>'+opts+
-        '<div class="fb" data-fb></div>';
-      box.appendChild(qd);
-    });
-    quiz.appendChild(box);
-  });
-});
-
-quiz.addEventListener("change", e=>{
-  if(e.target.type!=="radio") return;
-  const qd = e.target.closest(".q");
-  qd.querySelectorAll(".opt").forEach(o=>o.classList.remove("sel"));
-  e.target.closest(".opt").classList.add("sel");
-  updateBadge(qd.closest(".unit"));
-});
-
-function updateBadge(unitBox){
-  const qs = [...unitBox.querySelectorAll(".q")];
-  const done = qs.filter(q=>q.querySelector("input:checked")).length;
-  const badge = unitBox.querySelector("[data-badge]");
-  if(done===0){ badge.className="badge"; badge.textContent="未作答"; }
-  else if(done<qs.length){ badge.className="badge"; badge.textContent=done+"/"+qs.length+" 作答中"; }
-  else { badge.className="badge"; badge.textContent="待提交"; }
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-document.getElementById("reset").addEventListener("click", ()=>location.reload());
+// 初始化渲染
+function initQuiz() {
+  quizContainer.innerHTML = "";
+  modTabsContainer.innerHTML = "";
 
-document.getElementById("submit").addEventListener("click", ()=>{
-  const units = [];
-  let answeredAll = true;
-  document.querySelectorAll(".unit").forEach(unitBox=>{
-    const qs = [...unitBox.querySelectorAll(".q")];
-    let correct=0, answered=0;
-    qs.forEach(q=>{
-      const sel = q.querySelector("input:checked");
-      const ans = q.dataset.answer;
-      const fb = q.querySelector("[data-fb]");
-      q.querySelectorAll(".opt").forEach(o=>o.classList.remove("right","wrong"));
-      if(sel){
-        answered++;
-        const chosen = sel.value;
-        if(chosen===ans){ correct++; sel.closest(".opt").classList.add("right"); }
-        else {
-          sel.closest(".opt").classList.add("wrong");
-          q.querySelector('.opt[data-k="'+ans+'"]').classList.add("right");
-        }
-      } else {
-        q.querySelector('.opt[data-k="'+ans+'"]').classList.add("right");
-      }
-      const data = DATA.模块.flatMap(m=>m.单元).find(u=>u.编号===unitBox.dataset.unit)
-                    .题目.find(x=>x.id===q.dataset.qid);
-      const ok = sel && sel.value===ans;
-      fb.className = "fb show " + (ok?"right":"wrong");
-      fb.innerHTML = ok
-        ? "✔ 回答正确。考察点：" + data.考察概念
-        : "✘ 正确答案：" + ans + "。考察点：" + data.考察概念 + "<br>说明：" + data.答错说明;
-    });
-    if(answered<qs.length) answeredAll=false;
-    const pass = correct >= Math.ceil(qs.length*2/3);
-    const badge = unitBox.querySelector("[data-badge]");
-    badge.className = "badge " + (pass?"ok":"warn");
-    badge.textContent = (pass?"✅ 可跳过 ":"📘 建议学习 ") + correct+"/"+qs.length;
-    units.push({编号:unitBox.dataset.unit,
-      名称:unitBox.querySelector(".unit-t").textContent.replace(unitBox.dataset.unit,"").trim(),
-      正确:correct,题数:qs.length,pass});
+  // 1. 渲染模块 Tabs
+  DATA.模块.forEach((mod, idx) => {
+    const tab = document.createElement("button");
+    tab.className = "mod-tab" + (idx === 0 ? " active" : "");
+    tab.dataset.modIdx = idx;
+    tab.innerHTML = '<span>M' + (idx + 1) + ' ' + mod.模块名称.split("：")[0] + '</span><span class="mod-tab-badge" id="tab-badge-' + idx + '">0/' + getModuleQuestionCount(idx) + '</span>';
+    tab.addEventListener("click", () => switchModule(idx));
+    modTabsContainer.appendChild(tab);
   });
 
-  const need = units.filter(u=>!u.pass).length;
-  let advice;
-  if(need>5) advice = "你有 <b>"+need+"</b> 个单元未达标，建议<b>完整学习本课程</b>，从头建立决策操作系统。";
-  else if(need>=3) advice = "你有 <b>"+need+"</b> 个单元未达标，建议<b>按需补课</b>，优先补齐下方标记为『建议学习』的单元。";
-  else if(need>=1) advice = "仅 <b>"+need+"</b> 个单元未达标，可<b>定向学习</b>这几个薄弱单元，其余可跳过。";
-  else advice = "🎉 全部单元均已达标，你已具备本课程的核心认知，<b>可整体跳过</b>，或仅做兴趣性浏览。";
+  // "全卷平铺" Tab
+  const allTab = document.createElement("button");
+  allTab.className = "mod-tab";
+  allTab.dataset.modIdx = "all";
+  allTab.innerHTML = '<span>📄 全卷平铺浏览</span>';
+  allTab.addEventListener("click", () => switchModule("all"));
+  modTabsContainer.appendChild(allTab);
 
-  const R = document.getElementById("result");
-  const total = units.reduce((s,u)=>s+u.正确,0);
-  const totalQ = units.reduce((s,u)=>s+u.题数,0);
+  // 2. 渲染各模块内容
+  DATA.模块.forEach((mod, modIdx) => {
+    const modSec = document.createElement("div");
+    modSec.className = "mod-section" + (modIdx === 0 ? " active" : "");
+    modSec.dataset.modIdx = modIdx;
+
+    const modHead = document.createElement("div");
+    modHead.className = "mod-heading";
+    modHead.innerHTML = '<div class="mod-heading-text">' + mod.模块编号 + '：' + mod.模块名称 + '</div>';
+    modSec.appendChild(modHead);
+
+    mod.单元.forEach(u => {
+      const uCard = document.createElement("div");
+      uCard.className = "unit-card";
+      uCard.dataset.unit = u.编号;
+
+      uCard.innerHTML =
+        '<div class="unit-head">' +
+          '<div class="unit-name"><span class="unit-tag">' + u.编号 + '</span>' + u.名称 + '</div>' +
+          '<span class="unit-status-badge" data-unit-badge="' + u.编号 + '">未作答</span>' +
+        '</div>' +
+        '<div class="unit-meta">' +
+          '<span>🎯 通过标准：' + (currentMode === "quick" ? "答对核心哨兵题即通过" : u.通过线) + '</span>' +
+          '<span>· 重点：' + Array.from(new Set(u.题目.map(q => q.考察概念.split("、")[0]))).slice(0, 2).join("、") + '</span>' +
+        '</div>' +
+        '<div class="unit-questions" data-unit-q-container="' + u.编号 + '"></div>';
+
+      const qContainer = uCard.querySelector('[data-unit-q-container="' + u.编号 + '"]');
+
+      u.题目.forEach((q, qIndex) => {
+        const qItem = document.createElement("div");
+        qItem.className = "question-item";
+        qItem.dataset.qid = q.id;
+        qItem.dataset.isSentinel = q.is_sentinel ? "true" : "false";
+        qItem.dataset.answer = q.答案;
+
+        // 如果是极速模式且非哨兵题，默认隐藏
+        if (currentMode === "quick" && !q.is_sentinel) {
+          qItem.classList.add("hidden-question");
+        }
+
+        let optsHtml = '<div class="opt-list">';
+        ["A", "B", "C", "D"].forEach(letter => {
+          if (!q.选项[letter]) return;
+          optsHtml +=
+            '<label class="opt-row" data-letter="' + letter + '">' +
+              '<input type="radio" name="' + q.id + '" value="' + letter + '">' +
+              '<span class="opt-letter">' + letter + '.</span>' +
+              '<span class="opt-text">' + q.选项[letter] + '</span>' +
+            '</label>';
+        });
+        optsHtml += '</div>';
+
+        qItem.innerHTML =
+          '<div class="q-top-bar">' +
+            '<div>' +
+              (q.is_sentinel ? '<span class="q-sentinel-badge">🌟 核心哨兵题</span> ' : '') +
+              '<span class="q-concept-tag">考察点：' + q.考察概念 + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="q-title"><i>' + q.id + '</i>' + q.题干 + '</div>' +
+          optsHtml +
+          '<div class="q-actions">' +
+            '<button type="button" class="btn-skip" data-skip-qid="' + q.id + '">⚡ 我不了解此概念（跳过）</button>' +
+          '</div>' +
+          '<div class="q-feedback" data-feedback-qid="' + q.id + '"></div>';
+
+        qContainer.appendChild(qItem);
+      });
+
+      // 在极速模式下提供“展开剩余 2 题”按钮
+      const expandDiv = document.createElement("div");
+      expandDiv.className = "unit-expand-trigger";
+      expandDiv.dataset.expandUnit = u.编号;
+      expandDiv.style.display = currentMode === "quick" ? "flex" : "none";
+      expandDiv.innerHTML = '<button class="btn-expand-unit" data-expand-btn="' + u.编号 + '">👇 展开本科剩余 2 题深度验证</button>';
+      uCard.appendChild(expandDiv);
+
+      modSec.appendChild(uCard);
+    });
+
+    quizContainer.appendChild(modSec);
+  });
+
+  bindEvents();
+  updateProgress();
+}
+
+function getModuleQuestionCount(modIdx) {
+  const mod = DATA.模块[modIdx];
+  let count = 0;
+  mod.单元.forEach(u => {
+    u.题目.forEach(q => {
+      if (currentMode === "deep" || q.is_sentinel) count++;
+    });
+  });
+  return count;
+}
+
+function switchModule(target) {
+  activeModIndex = target;
+  document.querySelectorAll(".mod-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.modIdx == target);
+  });
+
+  document.querySelectorAll(".mod-section").forEach(sec => {
+    if (target === "all") {
+      sec.classList.add("active");
+    } else {
+      sec.classList.toggle("active", sec.dataset.modIdx == target);
+    }
+  });
+
+  // 更新上一模块/下一模块按钮文字状态
+  const prevBtn = document.getElementById("btn-prev-mod");
+  const nextBtn = document.getElementById("btn-next-mod");
+  if (target === "all") {
+    prevBtn.style.display = "none";
+    nextBtn.style.display = "none";
+  } else {
+    prevBtn.style.display = "inline-flex";
+    nextBtn.style.display = "inline-flex";
+    prevBtn.disabled = (target === 0);
+    prevBtn.style.opacity = (target === 0 ? "0.5" : "1");
+    nextBtn.textContent = (target === DATA.模块.length - 1 ? "完成浏览" : "下一模块 👉");
+  }
+}
+
+function bindEvents() {
+  // 选项点击事件代理
+  quizContainer.addEventListener("change", e => {
+    if (e.target.type !== "radio") return;
+    const qid = e.target.name;
+    const choice = e.target.value;
+    const qItem = e.target.closest(".question-item");
+
+    userAnswers[qid] = { choice, isSkip: false };
+
+    qItem.querySelectorAll(".opt-row").forEach(r => r.classList.remove("selected"));
+    e.target.closest(".opt-row").classList.add("selected");
+
+    const skipBtn = qItem.querySelector('.btn-skip');
+    if (skipBtn) skipBtn.classList.remove("skipped");
+
+    updateUnitStatus(qItem.closest(".unit-card"));
+    updateProgress();
+  });
+
+  // 点击“我不了解此概念（跳过）”按钮
+  quizContainer.addEventListener("click", e => {
+    const skipBtn = e.target.closest(".btn-skip");
+    if (skipBtn) {
+      const qid = skipBtn.dataset.skipQid;
+      const qItem = skipBtn.closest(".question-item");
+      const isAlreadySkipped = userAnswers[qid] && userAnswers[qid].isSkip;
+
+      if (isAlreadySkipped) {
+        // 取消跳过
+        delete userAnswers[qid];
+        skipBtn.classList.remove("skipped");
+        skipBtn.textContent = "⚡ 我不了解此概念（跳过）";
+      } else {
+        // 设为跳过
+        userAnswers[qid] = { choice: null, isSkip: true };
+        qItem.querySelectorAll(".opt-row").forEach(r => {
+          r.classList.remove("selected");
+          const radio = r.querySelector("input");
+          if (radio) radio.checked = false;
+        });
+        skipBtn.classList.add("skipped");
+        skipBtn.textContent = "✓ 已标记跳过（未掌握）";
+      }
+
+      updateUnitStatus(qItem.closest(".unit-card"));
+      updateProgress();
+      return;
+    }
+
+    // 点击“展开本科剩余 2 题”
+    const expandBtn = e.target.closest(".btn-expand-unit");
+    if (expandBtn) {
+      const uCard = expandBtn.closest(".unit-card");
+      const hiddenQs = uCard.querySelectorAll(".question-item.hidden-question");
+      const isExpanded = expandBtn.dataset.expanded === "true";
+
+      if (isExpanded) {
+        hiddenQs.forEach(q => q.style.display = "none");
+        expandBtn.textContent = "👇 展开本科剩余 2 题深度验证";
+        expandBtn.dataset.expanded = "false";
+      } else {
+        hiddenQs.forEach(q => q.style.display = "block");
+        expandBtn.textContent = "👆 收起额外加测题目";
+        expandBtn.dataset.expanded = "true";
+      }
+      updateProgress();
+    }
+  });
+
+  // 模式切换
+  document.getElementById("btn-mode-quick").addEventListener("click", () => switchMode("quick"));
+  document.getElementById("btn-mode-deep").addEventListener("click", () => switchMode("deep"));
+
+  // 模块导航
+  document.getElementById("btn-prev-mod").addEventListener("click", () => {
+    if (typeof activeModIndex === "number" && activeModIndex > 0) {
+      switchModule(activeModIndex - 1);
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    }
+  });
+  document.getElementById("btn-next-mod").addEventListener("click", () => {
+    if (typeof activeModIndex === "number" && activeModIndex < DATA.模块.length - 1) {
+      switchModule(activeModIndex + 1);
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    } else {
+      document.getElementById("btn-submit").scrollIntoView({ behavior: "smooth" });
+    }
+  });
+
+  // 重置
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    if (confirm("确定要清空当前所有答题记录吗？")) {
+      location.reload();
+    }
+  });
+
+  // 提交
+  document.getElementById("btn-submit").addEventListener("click", handleSubmit);
+}
+
+function switchMode(newMode) {
+  if (currentMode === newMode) return;
+  currentMode = newMode;
+
+  document.getElementById("btn-mode-quick").classList.toggle("active", newMode === "quick");
+  document.getElementById("btn-mode-deep").classList.toggle("active", newMode === "deep");
+
+  if (newMode === "quick") {
+    modeDescText.innerHTML =
+      '<b>极速模式（推荐）：</b>每单元精选 1 道最具辨识度的核心“哨兵题”（共 15 题）。答对即判定可跳过；遇到不懂概念可一键跳过，约 5 分钟即可定位全部薄弱单元。';
+    document.querySelectorAll(".question-item").forEach(q => {
+      if (q.dataset.isSentinel === "false") {
+        q.classList.add("hidden-question");
+        q.style.display = "none";
+      } else {
+        q.classList.remove("hidden-question");
+        q.style.display = "block";
+      }
+    });
+    document.querySelectorAll(".unit-expand-trigger").forEach(el => el.style.display = "flex");
+  } else {
+    modeDescText.innerHTML =
+      '<b>深度自测模式：</b>开放全部 15 单元共 45 道题目（每单元 3 题）。单元答对率 ≥ 2/3 视为掌握，适合需要全面精确摸底的学员。';
+    document.querySelectorAll(".question-item").forEach(q => {
+      q.classList.remove("hidden-question");
+      q.style.display = "block";
+    });
+    document.querySelectorAll(".unit-expand-trigger").forEach(el => el.style.display = "none");
+  }
+
+  // 刷新徽章总数
+  DATA.模块.forEach((m, idx) => {
+    const badge = document.getElementById("tab-badge-" + idx);
+    if (badge) badge.textContent = "0/" + getModuleQuestionCount(idx);
+  });
+
+  document.querySelectorAll(".unit-card").forEach(u => updateUnitStatus(u));
+  updateProgress();
+  showToast(newMode === "quick" ? "已切换至 15 题极速诊断模式" : "已切换至 45 题完整深度自测模式");
+}
+
+function updateUnitStatus(uCard) {
+  const qs = [...uCard.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+  const answered = qs.filter(q => userAnswers[q.dataset.qid]).length;
+  const badge = uCard.querySelector("[data-unit-badge]");
+
+  if (answered === 0) {
+    badge.className = "unit-status-badge";
+    badge.textContent = "未作答";
+  } else if (answered < qs.length) {
+    badge.className = "unit-status-badge";
+    badge.textContent = answered + "/" + qs.length + " 作答中";
+  } else {
+    badge.className = "unit-status-badge ok";
+    badge.textContent = "已完成本单元";
+  }
+}
+
+function updateProgress() {
+  // 计算当前可视题目的作答数
+  const visibleQs = [...document.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+  const total = visibleQs.length;
+  const answered = visibleQs.filter(q => userAnswers[q.dataset.qid]).length;
+
+  const pct = total === 0 ? 0 : Math.round((answered / total) * 100);
+  progBar.style.width = pct + "%";
+  progNum.textContent = answered + " / " + total + " (" + pct + "%)";
+
+  // 更新各模块 Tab 徽章
+  DATA.模块.forEach((mod, idx) => {
+    const sec = document.querySelector('.mod-section[data-mod-idx="' + idx + '"]');
+    if (!sec) return;
+    const modVisibleQs = [...sec.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+    const modAnswered = modVisibleQs.filter(q => userAnswers[q.dataset.qid]).length;
+    const tabBadge = document.getElementById("tab-badge-" + idx);
+    if (tabBadge) {
+      tabBadge.textContent = modAnswered + "/" + modVisibleQs.length;
+    }
+  });
+}
+
+function handleSubmit() {
+  const unitsResult = [];
+  let totalScore = 0;
+  let totalQuestionsCount = 0;
+
+  document.querySelectorAll(".unit-card").forEach(uCard => {
+    const unitId = uCard.dataset.unit;
+    const unitTitle = uCard.querySelector(".unit-name").textContent.replace(unitId, "").trim();
+    const qs = [...uCard.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+
+    let unitCorrect = 0;
+    let sentinelCorrect = false;
+
+    qs.forEach(qItem => {
+      totalQuestionsCount++;
+      const qid = qItem.dataset.qid;
+      const ans = qItem.dataset.answer;
+      const isSentinel = qItem.dataset.isSentinel === "true";
+      const record = userAnswers[qid];
+      const isSkip = record && record.isSkip;
+      const userChoice = record ? record.choice : null;
+      const isCorrect = userChoice === ans;
+
+      if (isCorrect) {
+        unitCorrect++;
+        totalScore++;
+        if (isSentinel) sentinelCorrect = true;
+      }
+
+      // 高亮选项
+      qItem.querySelectorAll(".opt-row").forEach(row => {
+        row.classList.remove("is-correct", "is-wrong");
+        if (row.dataset.letter === ans) {
+          row.classList.add("is-correct");
+        } else if (row.dataset.letter === userChoice && !isCorrect) {
+          row.classList.add("is-wrong");
+        }
+      });
+
+      // 反馈信息
+      const fb = qItem.querySelector("[data-feedback-qid]");
+      const qData = DATA.模块.flatMap(m => m.单元).find(u => u.编号 === unitId).题目.find(x => x.id === qid);
+
+      fb.className = "q-feedback show " + (isCorrect ? "ok" : "err");
+      if (isCorrect) {
+        fb.innerHTML = "✔ <b>正确！</b>考察重点：" + qData.考察概念;
+      } else if (isSkip) {
+        fb.innerHTML = "⚡ <b>已跳过。</b>标准答案是 <b>" + ans + "</b>（" + qData.选项[ans] + "）。<br><b>重点说明：</b>" + qData.答错说明;
+      } else {
+        fb.innerHTML = "✘ <b>有待提升。</b>标准答案是 <b>" + ans + "</b>。<br><b>解析说明：</b>" + qData.答错说明;
+      }
+    });
+
+    // 单元达标判定
+    let passed = false;
+    if (currentMode === "quick") {
+      // 极速模式：若只做 1 题看哨兵题；若展开做了多题，答对率 ≥ 2/3 亦可
+      passed = (qs.length === 1) ? sentinelCorrect : (unitCorrect >= Math.ceil(qs.length * 2 / 3));
+    } else {
+      passed = unitCorrect >= Math.ceil(qs.length * 2 / 3);
+    }
+
+    const badge = uCard.querySelector("[data-unit-badge]");
+    badge.className = "unit-status-badge " + (passed ? "ok" : "warn");
+    badge.textContent = (passed ? "✅ 可跳过 " : "📘 建议学习 ") + unitCorrect + "/" + qs.length;
+
+    // 抓取该单元考察概念
+    const concepts = Array.from(new Set(
+      DATA.模块.flatMap(m => m.单元).find(u => u.编号 === unitId).题目.map(q => q.考察概念)
+    )).join("、");
+
+    unitsResult.push({
+      id: unitId,
+      name: unitTitle,
+      passed: passed,
+      correct: unitCorrect,
+      total: qs.length,
+      concepts: concepts
+    });
+  });
+
+  // 渲染诊断结果报告面板
+  renderReport(unitsResult, totalScore, totalQuestionsCount);
+}
+
+function renderReport(units, totalScore, totalQ) {
+  const needUnits = units.filter(u => !u.passed);
+  const passUnits = units.filter(u => u.passed);
+  const needCount = needUnits.length;
+
+  let bannerClass, bannerIcon, bannerTitle, bannerDesc;
+  if (needCount > 5) {
+    bannerClass = "full";
+    bannerIcon = "📘";
+    bannerTitle = "建议系统、完整学习本课程";
+    bannerDesc = "你有 <b>" + needCount + " 个核心决策单元</b> 存在认知盲区。现代决策学是一套互相关联的思考操作系统，建议从头按模块完整选修，彻底完成决策思维重构。";
+  } else if (needCount >= 3) {
+    bannerClass = "some";
+    bannerIcon = "💡";
+    bannerTitle = "建议按需重点补课";
+    bannerDesc = "你已具备相当扎实的决策素养，但在 <b>" + needCount + " 个单元</b> 仍存在典型认知误区。建议针对下方标明的薄弱单元重点攻坚即可，其余单元可自主免修。";
+  } else if (needCount >= 1) {
+    bannerClass = "few";
+    bannerIcon = "🎯";
+    bannerTitle = "极高水准！仅需定向查漏补缺";
+    bannerDesc = "仅有 <b>" + needCount + " 个单元</b> 建议查漏补缺，其余绝大部分课程你均已熟练掌握，完全可以直接跳过！";
+  } else {
+    bannerClass = "pass";
+    bannerIcon = "🏆";
+    bannerTitle = "恭喜通关！认知模型极其完备";
+    bannerDesc = "全部 15 个决策单元均已达标！你对现代决策学的科学工具、实验机制与偏误防御具备极高敏锐度，<b>整门课程均可跳过</b>！";
+  }
+
+  const R = document.getElementById("result-panel");
   R.innerHTML =
-    '<h2>诊断结果</h2>'+
-    '<div class="score-top">总正确率：'+total+' / '+totalQ+'　（'+Math.round(total/totalQ*100)+'%）'+
-      (answeredAll?"":"　⚠️ 存在未作答题目，已按答错计")+'</div>'+
-    '<div class="bar"><i style="width:'+(total/totalQ*100)+'%"></i></div>'+
-    '<div class="advice">'+advice+'</div>'+
-    '<div class="rlist">'+units.map(u=>
-      '<div class="ritem '+(u.pass?"ok":"warn")+'"><span class="n">'+u.编号+" "+u.名称+
-      '</span><b>'+(u.pass?"可跳过":"建议学习")+' '+u.正确+"/"+u.题数+'</b></div>').join("")+'</div>';
+    '<div class="res-header">' +
+      '<h2 class="res-title">📊 个人决策认知能力诊断报告</h2>' +
+      '<div class="res-stat">' +
+        '<span>当前诊断模式：<b>' + (currentMode === "quick" ? "极速诊断（15题）" : "完整自测（45题）") + '</b></span>' +
+        '<span>总体掌握得分：<b>' + totalScore + ' / ' + totalQ + ' (' + Math.round(totalScore / totalQ * 100) + '%)</b></span>' +
+        '<span>达标可跳过：<b style="color:var(--ok);">' + passUnits.length + ' 单元</b></span>' +
+        '<span>建议选修：<b style="color:var(--warn);">' + needUnits.length + ' 单元</b></span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="res-banner ' + bannerClass + '">' +
+      '<div class="res-banner-icon">' + bannerIcon + '</div>' +
+      '<div>' +
+        '<div style="font-size:16px;font-weight:700;margin-bottom:4px;">' + bannerTitle + '</div>' +
+        '<div>' + bannerDesc + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<h3 style="font-size:15px;margin:20px 0 10px;">📋 各单元诊断与选课清单：</h3>' +
+    '<div class="res-grid">' +
+      units.map(u =>
+        '<div class="res-card ' + (u.passed ? "pass" : "need") + '">' +
+          '<div class="res-card-top">' +
+            '<span class="res-card-title">' + u.id + ' ' + u.name + '</span>' +
+            '<span class="res-card-badge">' + (u.passed ? "✅ 可跳过 (" + u.correct + "/" + u.total + ")" : "📘 建议学习 (" + u.correct + "/" + u.total + ")") + '</span>' +
+          '</div>' +
+          '<div class="res-card-concepts">核心模型：' + u.concepts + '</div>' +
+        '</div>'
+      ).join("") +
+    '</div>' +
+    '<div class="res-actions">' +
+      '<button class="btn-action btn-secondary" id="btn-copy-plan">📋 复制选课诊断清单</button>' +
+      '<button class="btn-action btn-primary" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ 回到顶部查看答题详情</button>' +
+    '</div>';
+
   R.classList.add("show");
-  R.scrollIntoView({behavior:"smooth"});
-});
+  R.scrollIntoView({ behavior: "smooth" });
+
+  document.getElementById("btn-copy-plan").addEventListener("click", () => {
+    let copyText = "【现代决策学 · 前置自测诊断清单】\n";
+    copyText += "评估结论：" + bannerTitle + "\n";
+    copyText += "达标单元：" + passUnits.map(u => u.id + " " + u.name).join("、") + "\n";
+    copyText += "建议选修：" + (needUnits.length ? needUnits.map(u => u.id + " " + u.name).join("、") : "无（全部达标）") + "\n";
+    navigator.clipboard.writeText(copyText).then(() => {
+      showToast("已成功复制选课建议清单到剪贴板！");
+    });
+  });
+}
+
+// 启动初始化
+initQuiz();
 </script>
 </body>
 </html>
