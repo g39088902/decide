@@ -1321,4 +1321,6 @@ initQuiz();
 
 out = HTML.replace("__PAYLOAD__", payload)
 (BASE / "decision_science_prequiz.html").write_text(out, encoding="utf-8")
+(BASE.parent / "index.html").write_text(out, encoding="utf-8")
 print("written:", BASE / "decision_science_prequiz.html")
+print("written:", BASE.parent / "index.html")
