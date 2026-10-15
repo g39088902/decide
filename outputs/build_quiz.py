@@ -794,6 +794,10 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 2200);
 }
 
+function isQuestionVisible(q) {
+  return q.style.display !== "none" && !q.classList.contains("hidden-question");
+}
+
 // 初始化渲染
 function initQuiz() {
   quizContainer.innerHTML = "";
@@ -856,6 +860,7 @@ function initQuiz() {
         // 如果是极速模式且非哨兵题，默认隐藏
         if (currentMode === "quick" && !q.is_sentinel) {
           qItem.classList.add("hidden-question");
+          qItem.style.display = "none";
         }
 
         let optsHtml = '<div class="opt-list">';
@@ -999,18 +1004,25 @@ function bindEvents() {
     const expandBtn = e.target.closest(".btn-expand-unit");
     if (expandBtn) {
       const uCard = expandBtn.closest(".unit-card");
-      const hiddenQs = uCard.querySelectorAll(".question-item.hidden-question");
+      const extraQs = uCard.querySelectorAll('.question-item[data-is-sentinel="false"]');
       const isExpanded = expandBtn.dataset.expanded === "true";
 
       if (isExpanded) {
-        hiddenQs.forEach(q => q.style.display = "none");
+        extraQs.forEach(q => {
+          q.classList.add("hidden-question");
+          q.style.display = "none";
+        });
         expandBtn.textContent = "👇 展开本科剩余 2 题深度验证";
         expandBtn.dataset.expanded = "false";
       } else {
-        hiddenQs.forEach(q => q.style.display = "block");
+        extraQs.forEach(q => {
+          q.classList.remove("hidden-question");
+          q.style.display = "block";
+        });
         expandBtn.textContent = "👆 收起额外加测题目";
         expandBtn.dataset.expanded = "true";
       }
+      updateUnitStatus(uCard);
       updateProgress();
     }
   });
@@ -1065,7 +1077,14 @@ function switchMode(newMode) {
         q.style.display = "block";
       }
     });
-    document.querySelectorAll(".unit-expand-trigger").forEach(el => el.style.display = "flex");
+    document.querySelectorAll(".unit-expand-trigger").forEach(el => {
+      el.style.display = "flex";
+      const btn = el.querySelector(".btn-expand-unit");
+      if (btn) {
+        btn.textContent = "👇 展开本科剩余 2 题深度验证";
+        btn.dataset.expanded = "false";
+      }
+    });
   } else {
     modeDescText.innerHTML =
       '<b>深度自测模式：</b>开放全部 15 单元共 45 道题目（每单元 3 题）。单元答对率 ≥ 2/3 视为掌握，适合需要全面精确摸底的学员。';
@@ -1088,7 +1107,7 @@ function switchMode(newMode) {
 }
 
 function updateUnitStatus(uCard) {
-  const qs = [...uCard.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+  const qs = [...uCard.querySelectorAll(".question-item")].filter(isQuestionVisible);
   const answered = qs.filter(q => userAnswers[q.dataset.qid]).length;
   const badge = uCard.querySelector("[data-unit-badge]");
 
@@ -1106,7 +1125,7 @@ function updateUnitStatus(uCard) {
 
 function updateProgress() {
   // 计算当前可视题目的作答数
-  const visibleQs = [...document.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+  const visibleQs = [...document.querySelectorAll(".question-item")].filter(isQuestionVisible);
   const total = visibleQs.length;
   const answered = visibleQs.filter(q => userAnswers[q.dataset.qid]).length;
 
@@ -1118,7 +1137,7 @@ function updateProgress() {
   DATA.模块.forEach((mod, idx) => {
     const sec = document.querySelector('.mod-section[data-mod-idx="' + idx + '"]');
     if (!sec) return;
-    const modVisibleQs = [...sec.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+    const modVisibleQs = [...sec.querySelectorAll(".question-item")].filter(isQuestionVisible);
     const modAnswered = modVisibleQs.filter(q => userAnswers[q.dataset.qid]).length;
     const tabBadge = document.getElementById("tab-badge-" + idx);
     if (tabBadge) {
@@ -1135,7 +1154,7 @@ function handleSubmit() {
   document.querySelectorAll(".unit-card").forEach(uCard => {
     const unitId = uCard.dataset.unit;
     const unitTitle = uCard.querySelector(".unit-name").textContent.replace(unitId, "").trim();
-    const qs = [...uCard.querySelectorAll(".question-item")].filter(q => q.style.display !== "none");
+    const qs = [...uCard.querySelectorAll(".question-item")].filter(isQuestionVisible);
 
     let unitCorrect = 0;
     let sentinelCorrect = false;
